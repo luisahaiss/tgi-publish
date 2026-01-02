@@ -226,14 +226,21 @@ footer {
 
 .about-text{ flex:1; }
 
+.photo-wrap {
+  text-align: center;         /* center inner content */
+  padding: 24px;             /* outer padding — increases visual "frame" */
+  background: transparent;   /* or keep your background color */
+  border-radius: 14px;
+}
+
+/* Image itself — full width of wrapper up to max-width */
 .centred-photo {
   display: block;
-
-  width: 100%;           /* allow scaling */
-  max-width: 480px;      /* desktop size (adjust as needed) */
+  width: 100%;
+  max-width: 720px;    /* bigger value: controls image max size on desktop */
   height: auto;
-  margin: 0 auto;        /* ✅ centers horizontally */
-  padding: 30px;          /* background space */
+  margin: 0 auto;
+  padding: 0;           /* NO padding on the image */
   border-radius: 14px;
   object-fit: cover;
 }
@@ -319,10 +326,11 @@ footer {
    </p>
   </section>
 
-  <section class="centred-photo">
+  <section class="photo-wrap">
   <img src="/assets/images/Wirkungen.png"
        class="centred-photo"
-       loading="lazy">
+       loading="lazy"
+       alt="Vier Kreise ...">
   <figcaption class="visually-hidden">Vier Kreise mit den Wörtern 'sozial-emotionale Wirkung', 'motorische Wirkung', 'kognitive Wirkung', 'sprachliche Wirkung'
   </figcaption>
   </section>    
@@ -332,7 +340,7 @@ footer {
       Erst in der zweiten Hälfte des 20. Jahrhunderts erhalten Tiere jedoch Einzug in die Therapie.
     </p>
   </section>
-  <section class="centred-photo">
+  <section class="photo-wrap">
   <img src="/assets/images/Timeline.png"
        class="centred-photo"
        loading="lazy">
