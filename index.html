@@ -355,98 +355,54 @@ function toggleMenu(){
 })();
 
 /* GLIDER for multiple cards (two) — rAF throttled, sequential behavior */
-/* GLIDER: instant-appear once, then never disappear */
 (function cardsGlider(){
   const cards = Array.from(document.querySelectorAll('.card'));
   if (!cards.length) return;
 
-  function clamp(v, min, max){ return Math.min(max, Math.max(min, v)); }
-
-  // gentle initial transform; do NOT force opacity here (JS controls it)
-  cards.forEach(c => {
-    c.style.transform = 'translateY(36px)';
-    // mark unseen unless server/CSS gave an initial shown state
-    if (!c.hasAttribute('data-shown')) c.dataset.shown = 'false';
-  });
-
-  let ticking = false;
-  const threshold = 0.6; // adjust: lower = appear sooner, higher = later
+  function clamp(v,min,max){ return Math.min(max,Math.max(min,v)); }
 
   function update(){
     const vh = window.innerHeight;
-
-    // Compute for all cards
-    const computed = cards.map((card, index) => {
+    cards.forEach(card => {
       const rect = card.getBoundingClientRect();
-      const entrance = clamp((vh - rect.top) / vh, 0, 1); // 0..1
+
+      // entrance: 0 = below viewport; 1 = section top reached top
+      const entrance = clamp((vh - rect.top) / (vh + rect.height), 0, 1);
+      // exit: 0 = not passed; 1 = fully scrolled past
       const exit = clamp((-rect.top) / (rect.height + 1), 0, 1);
 
-      // movement still computed so cards can slide in if you keep transform transition
+      // translate in, then up on exit
       const translateY = (1 - entrance) * 36 - exit * 64;
+      const opacity = clamp(Math.pow(entrance, 0.9) * (1 - exit), 0, 1);
 
-      // visible by rule: entrance >= threshold AND not fully scrolled past
-      const meetsThreshold = entrance >= threshold && !(rect.top + rect.height < 0);
+      card.style.transform = `translateY(${translateY.toFixed(2)}px)`;
 
-      return { card, index, rect, entrance, translateY, meetsThreshold };
-    });
-
-    // Determine whether card1 has been revealed before applying to card2
-    // We'll set card.dataset.shown = 'true' when it becomes visible the first time
-    computed.forEach(item => {
-      const card = item.card;
-      const index = item.index;
-
-      // if already shown previously, keep it shown forever
-      const alreadyShown = card.dataset.shown === 'true';
-
-      // card1 must be shown for subsequent cards to appear
-      const card1Shown = cards[0] && cards[0].dataset.shown === 'true';
-
-      let shouldShowNow = item.meetsThreshold;
-
-      // For card2+ ensure card1 has already been shown before they can become shown
-      if (index > 0) shouldShowNow = shouldShowNow && card1Shown;
-
-      // If either it's already shown or it meets the criteria now, mark shown
-      if (alreadyShown || shouldShowNow) {
-        // Persist shown state
-        card.dataset.shown = 'true';
-        // Apply visible style (instant)
-        card.style.opacity = '1';
-        card.style.visibility = 'visible';
+      // ensure white background when visible
+      if (opacity > 0.02) {
+        card.style.opacity = String(opacity);
+        card.style.backgroundColor = '#ffffff';
       } else {
-        // Not shown yet — keep hidden
         card.style.opacity = '0';
-        card.style.visibility = 'hidden';
       }
-
-      // Always update transform so cards can still slide in when they appear
-      card.style.transform = `translateY(${item.translateY.toFixed(2)}px)`;
     });
-
-    ticking = false;
   }
 
+  let ticking = false;
   function onScroll(){
     if (!ticking){
       ticking = true;
-      requestAnimationFrame(update);
+      requestAnimationFrame(()=>{ update(); ticking = false; });
     }
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('scroll', onScroll, { passive:true });
   window.addEventListener('resize', onScroll);
+  window.addEventListener('load', () => { update(); setTimeout(update, 250); });
 
-  window.addEventListener('load', () => {
-    update();
-    setTimeout(update, 250);
-  });
-
-  // initial run so page-load state is correct
+  // initial state
+  cards.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateY(36px)'; });
   update();
 })();
-
-
 </script>
 </body>
 </html>
