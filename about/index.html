@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Baloo Thambi 2' rel='stylesheet'>
+  <meta charset="utf-8">
+  <title>Verena Rieger TGI - Über mich</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+:root{
+  --bg-color:#ffffff;
+  --headline-text:#ffffff;
+  --headline-color:#95b18d;
+  --text-color:#000000;
+  --active-color:#537954;
+  --max-width:900px;
+  --gutter:20px;
+  --footer-height: 50px; /* anpassen an footer-Höhe */
+}
+
+nav a.active {
+  background-color: var(--active-color);
+}
+
+/* Base */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: 'Baloo Thambi 2'; 
+  font-size: 18px;
+  background:var(--bg-color);
+  color:var(--text-color);
+}
+
+.highlight {
+  font-weight: 700;   /* bold */
+  font-size: 1.2em;   /* bigger than surrounding text */
+}
+
+.indented-italic {
+  display: block;          /* sicherstellen, dass es ein Block ist */
+  margin-left: 45px !important;  /* verschiebt den ganzen Block */
+  padding-left: 0;
+  text-indent: 0 !important;     /* entfernt eventuell gesetztes first-line indent */
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Header: full-width background, centered content */
+header{
+  width:100%;
+  background:var(--headline-color);
+  position:sticky;
+  top:0;
+  z-index:50;
+  transition:background .22s ease,padding .22s ease;
+}
+
+/* Header – beim Scrollen */
+header.scrolled {
+  background: rgba(149, 177, 141, 0.6); /* transparenter */
+  --active-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Centered container used by header + main */
+.header-inner,
+main{
+  max-width:var(--max-width);
+  margin:0 auto;
+  padding:0 var(--gutter);
+}
+
+/* Header inner layout */
+.header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  min-height:88px;
+}
+
+/* Navigation (left) */
+.nav-left,
+nav{ display:flex; gap:20px; align-items:center; }
+nav a,
+.nav-left a{
+  color:var(--headline-text);
+  text-decoration:none;
+  font-weight:600;
+  padding:8px 12px;
+  border-radius:8px;
+}
+nav a.active{ background:var(--active-color); }
+
+/* Social icons (right) */
+.nav-right{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.nav-right a{
+  width:38px; height:38px;
+  display:inline-flex;
+  align-items:center; justify-content:center;
+  border-radius:8px;
+  background:rgba(0,0,0,0.08);
+  text-decoration:none;
+  transition:background .16s ease,transform .16s ease;
+}
+.nav-right a:hover{ background:rgba(0,0,0,0.12); transform:translateY(-2px); }
+
+/* Force SVG icons white (overrides inline fills) */
+.nav-right svg,
+.nav-right svg path{
+  width:18px; height:18px;
+  fill:var(--headline-text) !important;
+  stroke:none;
+}
+
+/* Hamburger (mobile) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background: var(--headline-text);
+  border-radius: 2px;
+}
+
+/* Mobile menu (absolute, centered under header-inner) */
+.nav-mobile{
+  display:none;
+  flex-direction:column;
+  gap:16px;
+  width:calc(100% - (var(--gutter) * 2));
+  max-width:var(--max-width);
+  left:50%;
+  transform:translateX(-50%);
+  position:absolute;
+  top:calc(100% + 8px);
+  background:var(--headline-color);
+  padding:18px;
+  border-radius:10px;
+}
+
+.nav-mobile a {
+  color: #ffffff;              /* ✅ Menütext weiß */
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.nav-mobile a:hover {
+  text-decoration: underline;
+}
+/* Main / sections */
+main{ max-width:var(--max-width); margin:60px auto; padding:0 var(--gutter); }
+section{
+  background:var(--bg-color);
+  padding:20px;
+  margin-bottom:20px;
+  border-radius:12px;
+}
+
+main::after{
+  content: "";
+  display: block;
+  height: var(--footer-height);
+  width: 1px; /* minimal, nur damit block sichtbar ist */
+  visibility: hidden;
+}
+
+/* Headlines */
+h1,h2{
+  color:var(--headline-color);
+  font-family:"Bello Script", cursive;
+  font-size: clamp(3rem, 3vw, 4rem);
+  line-height:1.15;
+  margin: 20px 0 10px 0; /* remove left offset */
+  margin-left: 25px; 
+  padding:0
+}
+
+/* Paragraphs */
+p{ line-height:1.7; margin:0 0 .9rem 0; }
+
+/* Footer */
+footer {
+    background: var(--headline-color); /* or --header-color if you defined it */
+    color: var(--headline-text);
+    text-align: center;
+    padding: 30px;
+    font-size: 0.9rem;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000
+}
+
+/* About-photo layout */
+.about-photo{
+  display:flex;
+  gap: 30px;               /* tighter gap between photo & text */
+  align-items:flex-start;
+  margin:0;
+  padding:0;
+}
+
+.hero-photo{
+  width:220px;
+  max-width:40%;
+  height:auto;
+  background:#F4E0C1;
+  padding:8px;            /* green/colored background space */
+  border-radius:14px;
+  object-fit:cover;
+  flex-shrink:0;
+  display:block;
+  margin:0;
+}
+.about-text{ flex:1; }
+
+/* Responsive */
+@media (max-width:768px){
+  nav{ display:none; }
+  .hamburger{ display:flex; }
+  .nav-mobile{ display:flex; }
+  .header-inner{ padding:8px 12px; min-height:64px; }
+  .about-photo{ flex-direction:column; gap:10px; }
+  .hero-photo{ width:100%; max-width:100%; }
+  h1{ font-size:1.8rem; }
+}
+
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <!-- Hamburger Menu -->
+    <div class="hamburger" onclick="toggleMenu()" aria-label="Menü">
+      <div></div><div></div><div></div>
+    </div>
+
+    <!-- Desktop Nav (left) -->
+    <nav id="navbar" class="nav-left">
+      <a href="/">Home</a>
+      <a href="/about/" class="active">Über mich</a>
+      <a href="/tgi/">TGI</a>
+      <a href="/programme/">Angebote</a>
+      <a href="/contact/">Kontakt</a>
+    </nav>
+
+    <!-- Social (right) -->
+    <div class="nav-right">
+      <!-- Instagram -->
+      <a href="https://instagram.com/yourusername" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"/></svg>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Mobile Nav (keeps being absolute / toggled by JS) -->
+  <div class="nav-mobile" id="mobileMenu" aria-hidden="true">
+    <a href="/">Home</a>
+    <a href="/about/" class="active">Über mich</a>
+    <a href="/tgi/">TGI</a>
+    <a href="/programme/">Angebote</a>
+    <a href="/contact/">Kontakt</a>
+  </div>
+</header>
+
+
+<main>
+  <section id="about">
+    <h1>Über mich...</h1>
+  </section>
+
+  <section class="about-photo">
+  <img src="assets/images/VR.png"
+       class="hero-photo"
+       loading="lazy">
+
+  <div class="about-text">
+    <p>
+      <span class="highlight">Hallo!</span>
+    </p>
+    <p>
+      Ich bin Verena Rieger, Sonderpädagogin und derzeit in Ausbildung zur Fachkraft für tiergestützte Interventionen (TGI) mit Bauernhoftieren (ISAAT-zertifizierte Weiterbildung).
+    </p>
+    <p>
+      Aus meiner Erfahrung als Sonderpädagogin weiß ich, wie viele neue Möglichkeiten die Zusammenarbeit mit Tieren eröffnet. Es fasziniert mich, wie Tiere dabei helfen können, neue Perspektiven zu gewinnen. Sie haben die besondere Fähigkeit, als „sozialer Katalysator“ zu wirken, und die kognitive, motorische und sozial-emotionale Entwicklung zu unterstützen. Bisher beziehen Schulen oder konventionelle Therapien Tiere leider viel zu selten ein. 
+    </p>
+    <p>
+      In meiner Arbeit als TGI-Fachkraft ist es mir wichtig, individuell auf die Bedürfnisse jedes Einzelnen einzugehen. Mein Ziel ist es dabei, persönliche Fähigkeiten zu stärken und Entwicklungspotenziale auszuschöpfen – auf eine ganzheitliche und natürliche Weise.
+    </p>
+  </div>
+  </section>
+
+  <section>
+    <p>
+      <span class="highlight">Vita</span>
+    </p>
+    <ul>
+      <li>2025–2026: Ausbildung zur Fachkraft für tiergestützte Interventionen mit Bauernhoftieren (ISAAT zertifizierte Weiterbildung)</li>
+      <li>seit 2023: Arbeit an einer Schule für Kinder mit Sprachbeeinträchtigungen (SBBZ Sprache)</li>
+      <li>2022–2023: Vorbereitungsdienst Lehramt Sonderpädagogik am Seminar Weingarten</li>
+      <li>2015–2020: Studium B.A. Lehramt Sonderpädagogik und M.Ed. Lehramt Sonderpädagogik an der Pädagogischen Hochschule Heidelberg mit den Förderschwerpunkten Geistige Entwicklung und Sprache</li>
+      <li>Einblicke in verschiedene Einrichtungen für Kinder mit Beeinträchtigungen, auch im Ausland durch Praktika, ehrenamtliche Jugendarbeit</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  © 2025 Luisa Haiß
+</footer>
+
+<script>
+  function toggleMenu() {
+    var menu = document.getElementById('mobileMenu');
+    menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+  }
+
+  // Set active link based on current page
+  var currentPage = window.location.pathname.split('/').pop();
+  var links = document.querySelectorAll('nav a, .nav-mobile a');
+  links.forEach(function(link) {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+
+  const header = document.querySelector("header");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 50) {
+      header.classList.add("scrolled");
+    } else {
+      header.classList.remove("scrolled");
+    }
+  });
+</script>
+
+</body>
+</html>
