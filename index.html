@@ -50,10 +50,20 @@ header.scrolled { background: rgba(149,177,141,0.6); }
 .header-inner, main{ max-width:var(--max-width); margin:0 auto; padding:0 var(--gutter); }
 .header-inner{ display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:88px; }
 
-.nav-left, nav{ display:flex; gap:20px; align-items:center;}
-nav a{ color:#ffffff !important; text-decoration:none; font-weight:600; padding:8px 12px; border-radius:8px}
+/* Navigation (left) */
+.nav-left,
+nav{ display:flex; gap:20px; align-items:center; }
+nav a,
+.nav-left a{
+  color:var(--headline-text);
+  text-decoration:none;
+  font-weight:600;
+  padding:8px 12px;
+  border-radius:8px;
+}
 nav a.active{ background:var(--active-color); }
 
+/* Social icons (right) */
 .nav-right{
   display:flex;
   gap:12px;
@@ -70,6 +80,13 @@ nav a.active{ background:var(--active-color); }
 }
 .nav-right a:hover{ background:rgba(0,0,0,0.12); transform:translateY(-2px); }
 
+/* Force SVG icons white (overrides inline fills) */
+.nav-right svg,
+.nav-right svg path{
+  width:18px; height:18px;
+  fill:var(--headline-text) !important;
+  stroke:none;
+}
 
 .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
 .hamburger div{ width:30px; height:4px; background:var(--headline-text); border-radius:2px; }
