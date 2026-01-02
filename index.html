@@ -73,12 +73,20 @@ main{
 }
 
 .grey-bg {
-  background-color: rgba(169, 169, 169, 0.6); /* semi-transparent background only */
-  padding: 2rem;        /* inner spacing */
-  margin: 3rem auto;   /* center horizontally */
-  max-width: 500px;
+  background-color: rgba(169, 169, 169, 0.6); /* transparent grey */
+  padding: 2rem 3rem;
   border-radius: 8px;
+  max-width: 500px;
+  margin: 0 auto;
   text-align: center;
+
+  position: relative;
+  z-index: 2;
+}
+
+.grey-bg h1 {
+  color: #000; /* or #fff if background image is dark */
+  margin: 0;
 }
 
     
