@@ -72,6 +72,15 @@ main{
   padding-bottom: calc(var(--footer-height) + 24px);
 }
 
+.grey-bg {
+  background-color: #A9A9A9;
+  padding: 2rem;        /* Innenabstand */
+  margin: 3rem auto;   /* Außenabstand + zentriert */
+  max-width: 500px;    /* Breite der Liste */
+  border-radius: 8px;  /* Optional: abgerundete Ecken */
+  opacity: 0.6;
+}
+    
 section{ background:var(--bg-color); padding:20px; margin-bottom:20px; border-radius:12px; }
 main::after{ content:""; display:block; height:var(--footer-height); width:1px; visibility:hidden; }
 
@@ -196,7 +205,7 @@ footer{ background:var(--headline-color); color:var(--headline-text); text-align
 
 <main>
   <section class="home-photo" aria-label="Hero">
-    <div class="content" role="region" aria-label="Hero-Text">
+    <div class="grey-bg" role="region" aria-label="Hero-Text">
       <h1>Willkommen!</h1>
     </div>
   </section>
