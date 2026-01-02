@@ -54,9 +54,22 @@ header.scrolled { background: rgba(149,177,141,0.6); }
 nav a{ color:#ffffff !important; text-decoration:none; font-weight:600; padding:8px 12px; border-radius:8px}
 nav a.active{ background:var(--active-color); }
 
-.nav-right{ display:flex; gap:12px; align-items:center; }
-.nav-right a{ width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; border-radius:8px; background:rgba(0,0,0,0.08); text-decoration:none; transition:background .16s ease,transform .16s ease; }
+.nav-right{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.nav-right a{
+  width:38px; height:38px;
+  display:inline-flex;
+  align-items:center; justify-content:center;
+  border-radius:8px;
+  background:rgba(0,0,0,0.08);
+  text-decoration:none;
+  transition:background .16s ease,transform .16s ease;
+}
 .nav-right a:hover{ background:rgba(0,0,0,0.12); transform:translateY(-2px); }
+
 
 .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
 .hamburger div{ width:30px; height:4px; background:var(--headline-text); border-radius:2px; }
