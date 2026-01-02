@@ -74,7 +74,7 @@ main{
 
 .grey-bg {
   background-color: rgba(169, 169, 169, 0.6); /* transparent grey */
-  padding: 2rem 3rem;
+  padding: 1rem 2rem;
   border-radius: 8px;
   max-width: 500px;
   margin: 0 auto;
@@ -135,6 +135,41 @@ footer{ background:var(--headline-color); color:var(--headline-text); text-align
 }
 
 .home-photo .content{ position:relative; z-index:2; display:flex; align-items:center; justify-content:center; height:100%; text-align:center; padding:clamp(1rem,3vw,3rem); }
+
+/* Ensure the grey box background is translucent but text is 100% opaque and crisp */
+.home-photo .grey-bg {
+  position: relative;
+  z-index: 3;                     /* place above the overlay */
+  background-color: rgba(169,169,169,0.55); /* translucent background only */
+  color: #000;                    /* solid text color */
+  padding: 1rem 2rem;
+  border-radius: 6px;
+  max-width: 600px;
+  text-align: center;
+
+  /* Defensive - prevent any inherited blur/opacity/backdrop effects */
+  opacity: 1 !important;
+  filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  mix-blend-mode: normal;
+}
+
+/* Ensure children are fully opaque too */
+.home-photo .grey-bg * {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Make the heading bold and crisp */
+.home-photo .grey-bg h1 {
+  margin: 0;
+  color: #000;         /* choose #fff if you prefer white text */
+  font-weight: 700;    /* stronger weight for visual contrast */
+  text-shadow: none;
+}
 
 /* ---------- CARD (two cards) ---------- */
 /* Full-bleed card base */
