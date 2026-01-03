@@ -1,10 +1,12 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <link href='https://fonts.googleapis.com/css?family=Baloo Thambi 2' rel='stylesheet'>
   <meta charset="utf-8">
-  <title>Verena Rieger TGI - Über mich</title>
+  <title>Verena Rieger TGI - TGI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Font (korrekte Einbindung) -->
+  <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi+2" rel="stylesheet">
 
   <style>
 :root{
@@ -15,38 +17,36 @@
   --active-color:#537954;
   --max-width:900px;
   --gutter:20px;
-  --footer-height: 50px; /* anpassen an footer-Höhe */
-}
-
-nav a.active {
-  background-color: var(--active-color);
 }
 
 /* Base */
 *{box-sizing:border-box}
+html { height: 100%; }
 body{
   margin:0;
-  font-family: 'Baloo Thambi 2'; 
+  font-family: 'Baloo Thambi 2', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 18px;
   background:var(--bg-color);
   color:var(--text-color);
+
+  /* Footer immer am Ende */
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
 }
 
-.highlight {
-  font-weight: 700;   /* bold */
-  font-size: 1.2em;   /* bigger than surrounding text */
-}
+.highlight { font-weight:700; font-size:1.2em; }
 
-.indented-italic {
-  display: block;          /* sicherstellen, dass es ein Block ist */
-  margin-left: 45px !important;  /* verschiebt den ganzen Block */
+.indented-italic{
+  display:block;
+  margin-left: 45px !important;
   padding-left: 0;
-  text-indent: 0 !important;     /* entfernt eventuell gesetztes first-line indent */
+  text-indent: 0 !important;
   font-style: italic;
   line-height: 1.5;
 }
 
-/* Header: full-width background, centered content */
+/* Header */
 header{
   width:100%;
   background:var(--headline-color);
@@ -55,18 +55,21 @@ header{
   z-index:50;
   transition:background .22s ease,padding .22s ease;
 }
+header.scrolled { background: rgba(149, 177, 141, 0.6); }
 
-/* Header – beim Scrollen */
-header.scrolled {
-  background: rgba(149, 177, 141, 0.6); /* transparenter */
-  --active-color: rgba(255, 255, 255, 0.35);
-}
-
-/* Centered container used by header + main */
+/* Container */
 .header-inner,
 main{
   max-width:var(--max-width);
   margin:0 auto;
+  padding:0 var(--gutter);
+}
+
+/* main füllt Restplatz */
+main{
+  flex:1;
+  max-width:var(--max-width);
+  margin:60px auto;
   padding:0 var(--gutter);
 }
 
@@ -79,7 +82,7 @@ main{
   min-height:88px;
 }
 
-/* Navigation (left) */
+/* Desktop nav */
 .nav-left,
 nav{ display:flex; gap:20px; align-items:center; }
 nav a,
@@ -92,7 +95,7 @@ nav a,
 }
 nav a.active{ background:var(--active-color); }
 
-/* Social icons (right) */
+/* Social icons */
 .nav-right{
   display:flex;
   gap:12px;
@@ -108,35 +111,31 @@ nav a.active{ background:var(--active-color); }
   transition:background .16s ease,transform .16s ease;
 }
 .nav-right a:hover{ background:rgba(0,0,0,0.12); transform:translateY(-2px); }
-
-/* Force SVG icons white (overrides inline fills) */
 .nav-right svg,
-.nav-right svg path{
-  width:18px; height:18px;
-  fill:var(--headline-text) !important;
-  stroke:none;
-}
+.nav-right svg path{ width:18px; height:18px; fill:var(--headline-text) !important; stroke:none; }
 
-/* Hamburger (mobile) */
+/* Hamburger (desktop hidden) */
 .hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-}
-
-.hamburger div {
-  width: 30px;
-  height: 4px;
-  background: var(--headline-text);
-  border-radius: 2px;
-}
-
-/* Mobile menu (absolute, centered under header-inner) */
-.nav-mobile{
   display:none;
   flex-direction:column;
-  gap:16px;
+  gap:6px;
+  background:transparent;
+  border:none;
+  padding:6px;
+  cursor:pointer;
+}
+.hamburger .line{
+  width:28px;
+  height:3px;
+  background:var(--headline-text);
+  border-radius:2px;
+}
+
+/* Mobile menu */
+.nav-mobile{
+  display:none; /* controlled by .open class */
+  flex-direction:column;
+  gap:12px;
   width:calc(100% - (var(--gutter) * 2));
   max-width:var(--max-width);
   left:50%;
@@ -144,173 +143,114 @@ nav a.active{ background:var(--active-color); }
   position:absolute;
   top:calc(100% + 8px);
   background:var(--headline-color);
-  padding:18px;
+  padding:14px;
   border-radius:10px;
+  z-index:60;
+  box-shadow:0 8px 18px rgba(0,0,0,0.08);
 }
+.nav-mobile.open{ display:flex; }
+.nav-mobile a{ color:#fff; text-decoration:none; font-weight:600; padding:8px 6px; border-radius:6px; }
+.nav-mobile a:hover{ text-decoration:underline; }
 
-.nav-mobile a {
-  color: #ffffff;              /* Menütext weiß */
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.nav-mobile a:hover {
-  text-decoration: underline;
-}
-/* Main / sections */
-main{ max-width:var(--max-width); margin:60px auto; padding:0 var(--gutter); }
-section{
-  background:var(--bg-color);
-  padding:20px;
-  margin-bottom:20px;
-  border-radius:12px;
-}
-
-main::after{
-  content: "";
-  display: block;
-  height: var(--footer-height);
-  width: 1px; /* minimal, nur damit block sichtbar ist */
-  visibility: hidden;
-}
+/* Sections */
+section{ background:var(--bg-color); padding:20px; margin-bottom:20px; border-radius:12px; }
 
 /* Headlines */
 h1,h2{
   color:var(--headline-color);
   font-family:"Bello Script", cursive;
-  font-size: clamp(3rem, 3vw, 4rem);
+  font-size: clamp(2.6rem, 4vw, 3.6rem);
   line-height:1.15;
-  margin: 20px 0 10px 0; /* remove left offset */
-  margin-left: 25px; 
-  padding:0
+  margin:20px 0 10px 0;
+  padding:0;
+  margin-left:0;
+  text-align:left;
 }
 
 /* Paragraphs */
 p{ line-height:1.7; margin:0 0 .9rem 0; }
 
-/* Footer */
-footer {
-    background: var(--headline-color); /* or --header-color if you defined it */
-    color: var(--headline-text);
-    text-align: center;
-    padding: 30px;
-    font-size: 0.9rem;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1000
-}
+/* Photo styles */
+.photo-wrap{ text-align:center; padding:24px; border-radius:14px; }
+.centred-photo{ display:block; width:100%; max-width:720px; height:auto; margin:0 auto; border-radius:14px; object-fit:cover; }
+.hero-photo{ width:220px; max-width:40%; height:auto; background:#F4E0C1; padding:8px; border-radius:14px; object-fit:cover; }
 
-/* About-photo layout */
-.about-photo{
-  display:flex;
-  gap: 30px;               /* tighter gap between photo & text */
-  align-items:flex-start;
-  margin:0;
-  padding:0;
-}
+/* Visually hidden for figcaption */
+.visually-hidden{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); border:0; }
 
-.hero-photo{
-  width:220px;
-  max-width:40%;
-  height:auto;
-  background:#F4E0C1;
-  padding:8px;            /* green/colored background space */
-  border-radius:14px;
-  object-fit:cover;
-  flex-shrink:0;
-  display:block;
-  margin:0;
-}
+/* Beige box */
+.beige-bg{ background:#F4E0C1; padding:2rem; margin:3rem auto; max-width:500px; border-radius:8px; }
 
-.about-text{ flex:1; }
-
-.photo-wrap {
-  text-align: center;         /* center inner content */
-  padding: 24px;             /* outer padding — increases visual "frame" */
-  background: transparent;   /* or keep your background color */
-  border-radius: 14px;
-}
-
-/* Image itself — full width of wrapper up to max-width */
-.centred-photo {
-  display: block;
-  width: 100%;
-  max-width: 720px;    /* bigger value: controls image max size on desktop */
-  height: auto;
-  margin: 0 auto;
-  padding: 0;           /* NO padding on the image */
-  border-radius: 14px;
-  object-fit: cover;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+/* Footer in flow (not fixed) */
+footer{
+  background:var(--headline-color);
+  color:var(--headline-text);
+  text-align:center;
+  padding:30px 20px;
+  font-size:0.95rem;
+  position:static;
+  width:100%;
+  box-sizing:border-box;
 }
 
 /* Responsive */
 @media (max-width:768px){
-  nav{ display:none; }
+  nav, .nav-left { display:none !important; }  /* hide desktop nav on mobile */
   .hamburger{ display:flex; }
-  .nav-mobile{ display:flex; }
+  .nav-mobile{ display:none; } /* remain hidden until .open */
+  .nav-mobile.open{ display:flex; }
+
   .header-inner{ padding:8px 12px; min-height:64px; }
-  .about-photo{ flex-direction:column; gap:10px; }
+  .about-photo{ flex-direction:column; gap:10px; align-items:center; }
   .hero-photo{ width:80%; max-width:80%; }
-  .centred-photo{ width: 80%; max-width:80%;}
-  h1{ font-size:1.8rem; }
-  .indented-italic { margin-left: 16px; }
+  .centred-photo{ width:80%; max-width:80%; }
+  h1{ font-size: clamp(2.6rem, 8vw, 3.2rem); text-align:center; }
+  .indented-italic{ margin-left:16px; }
+  .nav-mobile{ width:calc(100% - 32px); left:50%; transform:translateX(-50%); }
 }
 
+/* small tweaks */
+ul{ padding-left:1.25rem; margin:0.5rem 0; }
+li{ margin-bottom:0.35rem; }
   </style>
 </head>
 
 <body>
-
 <header>
   <div class="header-inner">
-    <!-- Hamburger Menu -->
-    <div class="hamburger" onclick="toggleMenu()" aria-label="Menü">
-      <div></div><div></div><div></div>
-    </div>
+    <!-- Hamburger (button for accessibility) -->
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menü" aria-expanded="false" aria-controls="mobileMenu">
+      <span class="line" aria-hidden="true"></span>
+      <span class="line" aria-hidden="true"></span>
+      <span class="line" aria-hidden="true"></span>
+    </button>
 
-    <!-- Desktop Nav (left) -->
+    <!-- Desktop Nav -->
     <nav id="navbar" class="nav-left">
-        <a href="/">Home</a>
-        <a href="/about/">Über mich</a>
-        <a href="/tgi/" class="active">TGI</a>
-        <a href="/programme/">Angebote</a>
-        <a href="/contact/">Kontakt</a>
+      <a href="/">Home</a>
+      <a href="/about/">Über mich</a>
+      <a href="/tgi/" class="active">TGI</a>
+      <a href="/programme/">Angebote</a>
+      <a href="/contact/">Kontakt</a>
     </nav>
 
-    <!-- Social (right) -->
-    <div class="nav-right">
-      <!-- Instagram -->
-      <a href="https://instagram.com/yourusername" target="_blank" aria-label="Instagram">
-        <svg viewBox="0 0 24 24"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"/></svg>
+    <!-- Social -->
+    <div class="nav-right" aria-hidden="false">
+      <a href="https://instagram.com/yourusername" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"/></svg>
       </a>
-      
     </div>
   </div>
 
-  <!-- Mobile Nav (keeps being absolute / toggled by JS) -->
+  <!-- Mobile Nav -->
   <div class="nav-mobile" id="mobileMenu" aria-hidden="true">
     <a href="/">Home</a>
     <a href="/about/">Über mich</a>
-    <a href="/tgi/" class="active">TGI</a>
+    <a href="/tgi/">TGI</a>
     <a href="/programme/">Angebote</a>
     <a href="/contact/">Kontakt</a>
   </div>
 </header>
-
 
 <main>
   <section id="tgi">
@@ -318,39 +258,23 @@ footer {
   </section>
 
   <section>
-   <p>Der Kontakt zu Tieren und zur Natur ist ein wichtiges Grundbedürfnis des Menschen. Besonders für Kinder bietet er viele wertvolle Möglichkeiten, sich positiv zu entwickeln – emotional, sozial, sprachlich, motorisch und geistig.
-   </p>
-   <p>Studien zeigen, dass der Umgang mit Tieren helfen kann, Stress abzubauen und innere Anspannung zu reduzieren. Vielleicht kennen Sie das selbst: Wenn man ein Tier streichelt, entsteht oft ein Gefühl von Ruhe und Geborgenheit. Dafür ist das Hormon Oxytocin verantwortlich – auch bekannt als das „Kuschelhormon“. Es unterstützt den Aufbau von Vertrauen und Bindung.
-   </p>
-   <p>In der tiergestützten Intervention (TGI) werden Tiere deshalb als soziale Brückenbauer eingesetzt. Sie erleichtern Begegnungen, fördern Kommunikation und schaffen einen natürlichen Zugang zu anderen Menschen. Gerade Kinder, die unsicher sind oder wenig Selbstvertrauen haben, können davon besonders profitieren. Sie lernen, Verantwortung zu übernehmen, auf andere zu achten und Vertrauen zu entwickeln – in sich selbst und in ihre Umgebung.
-   </p>
+   <p>Der Kontakt zu Tieren und zur Natur ist ein wichtiges Grundbedürfnis des Menschen. Besonders für Kinder bietet er viele wertvolle Möglichkeiten, sich positiv zu entwickeln – emotional, sozial, sprachlich, motorisch und geistig.</p>
+   <p>Studien zeigen, dass der Umgang mit Tieren helfen kann, Stress abzubauen und innere Anspannung zu reduzieren. Vielleicht kennen Sie das selbst: Wenn man ein Tier streichelt, entsteht oft ein Gefühl von Ruhe und Geborgenheit. Dafür ist das Hormon Oxytocin verantwortlich – auch bekannt als das „Kuschelhormon“. Es unterstützt den Aufbau von Vertrauen und Bindung.</p>
+   <p>In der tiergestützten Intervention (TGI) werden Tiere deshalb als soziale Brückenbauer eingesetzt. Sie erleichtern Begegnungen, fördern Kommunikation und schaffen einen natürlichen Zugang zu anderen Menschen. Gerade Kinder, die unsicher sind oder wenig Selbstvertrauen haben, können davon besonders profitieren. Sie lernen, Verantwortung zu übernehmen, auf andere zu achten und Vertrauen zu entwickeln – in sich selbst und in ihre Umgebung.</p>
   </section>
 
   <section class="photo-wrap">
-  <img src="/assets/images/Wirkungen.png"
-       class="centred-photo"
-       loading="lazy"
-       alt="Vier Kreise ...">
-  <figcaption class="visually-hidden">Vier Kreise mit den Wörtern 'sozial-emotionale Wirkung', 'motorische Wirkung', 'kognitive Wirkung', 'sprachliche Wirkung'
-  </figcaption>
-  </section>    
-  <section>
-    <p>
-      Die TGI ist keine "Erfindung der Moderne". Schon Hildegard von Bingen beschrieb im 12. Jahrhundert die heilende Wirkung von Tieren auf den Menschen. 
-      Erst in der zweiten Hälfte des 20. Jahrhunderts erhalten Tiere jedoch Einzug in die Therapie.
-    </p>
+    <img src="/assets/images/Wirkungen.png" class="centred-photo" loading="lazy" alt="Vier Kreise mit Wirkungen">
+    <figcaption class="visually-hidden">Vier Kreise mit den Wörtern 'sozial-emotionale Wirkung', 'motorische Wirkung', 'kognitive Wirkung', 'sprachliche Wirkung'</figcaption>
   </section>
+
+  <section>
+    <p>Die TGI ist keine "Erfindung der Moderne". Schon Hildegard von Bingen beschrieb im 12. Jahrhundert die heilende Wirkung von Tieren auf den Menschen. Erst in der zweiten Hälfte des 20. Jahrhunderts erhalten Tiere jedoch Einzug in die Therapie.</p>
+  </section>
+
   <section class="photo-wrap">
-  <img src="/assets/images/Timeline.png"
-       class="centred-photo"
-       loading="lazy">
-  <figcaption class="visually-hidden">Grafische Zeitleiste zur Geschichte tiergestützter Interventionen. 
-            Im 12. Jahrhundert erkennt Hildegard von Bingen die heilende Wirkung von Tieren. 
-            Im 13. Jahrhundert werden psychisch kranke Menschen auf Bauernhöfen betreut. 
-            In den 1960er-Jahren beobachtet der Psychologe Boris Levinson, dass Hunde die Therapie positiv beeinflussen. 
-            In den 1970er-Jahren wächst in den USA das Interesse an tiergestützten Interventionen. 
-            In den 1980er-Jahren finden Tiere auch in Europa zunehmend Eingang in therapeutische Arbeit."
-  </figcaption>
+    <img src="/assets/images/Timeline.png" class="centred-photo" loading="lazy" alt="Zeitleiste TGI">
+    <figcaption class="visually-hidden">Grafische Zeitleiste zur Geschichte tiergestützter Interventionen.</figcaption>
   </section>
 </main>
 
@@ -359,30 +283,80 @@ footer {
 </footer>
 
 <script>
-  function toggleMenu() {
-    var menu = document.getElementById('mobileMenu');
-    menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+/* =============
+   Mobile menu
+   ============= */
+(function(){
+  var menu = document.getElementById('mobileMenu');
+  var btn = document.getElementById('hamburgerBtn');
+
+  function openMenu(){
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden','false');
+    btn.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden'; // optional: prevent background scroll
+  }
+  function closeMenu(){
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden','true');
+    btn.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  }
+  function toggleMenu(){
+    if(menu.classList.contains('open')) closeMenu(); else openMenu();
   }
 
-  // Set active link based on current page
-  var currentPage = window.location.pathname.split('/').pop();
-  var links = document.querySelectorAll('nav a, .nav-mobile a');
-  links.forEach(function(link) {
-    if (link.getAttribute('href') === currentPage) {
-      link.classList.add('active');
+  document.addEventListener('DOMContentLoaded', function(){
+    if(menu) { menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); }
+    if(btn){
+      btn.setAttribute('aria-expanded','false');
+      btn.addEventListener('click', function(e){ e.stopPropagation(); toggleMenu(); });
     }
+
+    // close when clicking a link inside menu
+    document.addEventListener('click', function(e){
+      if(!menu || !btn) return;
+      var t = e.target;
+      if(menu.contains(t) && t.tagName.toLowerCase()==='a'){ closeMenu(); return; }
+      if(!menu.contains(t) && !btn.contains(t)) closeMenu();
+    });
+
+    // close on escape
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape'){ closeMenu(); }
+    });
+
+    // close when resizing to desktop
+    window.addEventListener('resize', function(){ if(window.innerWidth > 768) closeMenu(); });
+
+    // set active links (desktop + mobile) robustly
+    var path = window.location.pathname || '/';
+    if(!path.endsWith('/')) path += '/';
+    var links = document.querySelectorAll('nav a, .nav-mobile a');
+    links.forEach(function(link){
+      var href = link.getAttribute('href') || '';
+      try{
+        var parsed = new URL(href, window.location.origin);
+        var linkPath = parsed.pathname;
+        if(!linkPath.endsWith('/')) linkPath += '/';
+        if(linkPath === path) link.classList.add('active'); else link.classList.remove('active');
+      }catch(err){
+        var norm = href.endsWith('/') ? href : href + '/';
+        if(norm === path) link.classList.add('active'); else link.classList.remove('active');
+      }
+    });
   });
+})();
 
-  const header = document.querySelector("header");
-
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 50) {
-      header.classList.add("scrolled");
-    } else {
-      header.classList.remove("scrolled");
-    }
+/* =============
+   Header scroll
+   ============= */
+(function(){
+  var header = document.querySelector('header');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 50) header.classList.add('scrolled'); else header.classList.remove('scrolled');
   });
-
+})();
 </script>
 </body>
 </html>
