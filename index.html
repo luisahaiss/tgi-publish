@@ -1,399 +1,259 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <title>Verena Rieger TGI - Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <title>Verena Rieger TGI – Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font -->
   <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi+2" rel="stylesheet">
 
-<style>
-    :root{
-      --bg:#ffffff;
-      --headline-text:#ffffff;
-      --headline-color:#95b18d;
-      --text:#000000;
-      --accent:#537954;
-      --max-w:900px;
-      --gutter:20px;
-      --footer-h:50px;
-      --beige:#F4E0C1;
-      --overlay: rgba(0,0,0,0.12);
-    }
+  <style>
+:root{
+  --bg-color:#ffffff;
+  --headline-text:#ffffff;
+  --headline-color:#95b18d;
+  --text-color:#000000;
+  --active-color:#537954;
+  --max-width:900px;
+  --gutter:20px;
+}
 
-    /* Reset / base */
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0}
-    body{
-      font-family:'Baloo Thambi 2', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      font-size:18px;
-      color:var(--text);
-      background:var(--bg);
-      display:flex;
-      flex-direction:column;
-      min-height:100vh; /* footer sticky behaviour */
-    }
+/* ===== Base ===== */
+*{ box-sizing:border-box }
+html,body{ margin:0; height:100%; }
 
-    .header-inner, main { max-width:var(--max-w); margin:0 auto; padding:0 var(--gutter); }
+body{
+  font-family:'Baloo Thambi 2', system-ui, sans-serif;
+  font-size:18px;
+  background:var(--bg-color);
+  color:var(--text-color);
+}
 
-    /* Header */
-    header{
-      width:100%;
-      background:var(--headline-color);
-      position:sticky;
-      top:0;
-      z-index:120;
-      transition: background .22s ease;
-    }
-    .header-inner{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      min-height:76px;
-      padding:10px 0;
-    }
-  
-    nav{ display:flex; gap:18px; align-items:center; }
-    nav a{ color:var(--headline-text); text-decoration:none; font-weight:600; padding:8px 12px; border-radius:8px; }
-    nav a.active{ background: var(--accent); }
+/* ===== Headings ===== */
+h1{
+  color:var(--headline-color);
+  font-family:"Bello Script", cursive;
+  font-size:clamp(3rem,3vw,4rem);
+  line-height:1.15;
+  margin:0;
+}
+h2{
+  color:var(--headline-color);
+  margin-top:0;
+}
 
-    /* right icons */
-    .nav-right{ display:flex; gap:12px; align-items:center; }
-    .nav-right a{ width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; border-radius:8px; background:rgba(0,0,0,0.06); text-decoration:none; }
-    .nav-right svg, .nav-right svg path{ fill:var(--headline-text) !important; }
+/* ===== HEADER / NAVBAR ===== */
+header{
+  width:100%;
+  background:var(--headline-color);
+  position:sticky;
+  top:0;
+  z-index:100;
+  transition:background .22s ease;
+}
+header.scrolled{
+  background:rgba(149,177,141,0.6);
+}
 
-    /* Hamburger (desktop hidden) */
-    .hamburger{
-      display:none;
-      background:transparent;
-      border:0;
-      padding:6px;
-      cursor:pointer;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      flex-direction:column;
-    }
-    .hamburger .line{ width:30px; height:4px; background:var(--headline-text); border-radius:3px; display:block; }
+.header-inner{
+  max-width:var(--max-width);
+  margin:0 auto;
+  padding:0 var(--gutter);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:88px;
+}
 
-    /* Mobile nav & overlay */
-    .mobile-overlay{
-      display:none;
-      position:fixed;
-      inset:0;
-      background: rgba(0,0,0,0.36);
-      z-index:115;
-      opacity:0;
-      transition: opacity .18s ease;
-      pointer-events:none;
-    }
-    .mobile-overlay.open{ display:block; opacity:1; pointer-events:auto; }
+/* Nav */
+nav{
+  display:flex;
+  gap:20px;
+}
+nav a{
+  color:var(--headline-text);
+  text-decoration:none;
+  font-weight:600;
+  padding:8px 12px;
+  border-radius:8px;
+}
+nav a.active{
+  background:var(--active-color);
+}
 
-    .nav-mobile{
-      display:none;
-      position:absolute;
-      top:calc(100% + 8px);
-      left:50%;
-      transform:translateX(-50%);
-      width:calc(100% - 40px);
-      max-width:var(--max-w);
-      background:var(--headline-color);
-      padding:14px;
-      border-radius:10px;
-      box-shadow: 0 14px 40px rgba(0,0,0,0.12);
-      z-index:120;
-      flex-direction:column;
-      gap:12px;
-    }
-    .nav-mobile a{ color:#fff; text-decoration:none; font-weight:600; padding:8px 6px; border-radius:6px; }
-    .nav-mobile.open{ display:flex; }
+/* Social icons */
+.nav-right{
+  display:flex;
+  gap:12px;
+}
+.nav-right a{
+  width:38px;
+  height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  background:rgba(0,0,0,0.08);
+}
+.nav-right svg{
+  width:18px;
+  height:18px;
+  fill:#fff;
+}
 
-    /* Main & sections */
-    main{ flex:1; padding-bottom: calc(var(--footer-h) + 24px); }
-    h1,h2{ color:var(--headline-color); font-family:"Bello Script", cursive; font-size:clamp(3rem,3vw,4rem); line-height:1.15; margin:20px 0 10px 0; margin-left:25px; padding:0; }
-    section{ background:var(--bg); padding:20px; margin-bottom:20px; border-radius:12px; }
+/* Hamburger */
+.hamburger{
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  cursor:pointer;
+}
+.hamburger div{
+  width:30px;
+  height:4px;
+  background:#fff;
+  border-radius:2px;
+}
 
-    /* HERO: full-viewport on desktop, cover image + beige fallback */
-    /* ----------------------------
-   Hero: full-screen image
-   ---------------------------- */
-    .home-photo {
-      height: 100vh !important;               /* ganze Höhe des Viewports */
-      min-height: 360px;
-      width: 100%;
-      background-image: url("assets/images/Ziegen.png");
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-color: transparent !important; /* kein Farbhintergrund */
-      border-radius: 0 !important;
-      overflow: hidden;
-    }
-    
-    /* container, der vorher die beige Box war: make transparent + no padding */
-    .home-photo .grey-bg {
-      background: transparent !important;  /* entfernt das große beige Panel */
-      box-shadow: none !important;
-      padding: 0 !important;
-      max-width: none !important;
-      display: block;                      /* bleibt Block, wir stylen nur das h1 */
-    }
-    
-    /* ----------------------------
-       Nur Text "Willkommen!" hervorheben
-       ---------------------------- */
-    /* Variante: kleiner grauer Hintergrund direkt hinter dem h1,
-       zentriert und nur so groß wie der Text */
-    .home-photo .grey-bg h1 {
-      display: inline-block;                     /* nur so breit wie der Text */
-      background: rgba(244,224,193,0.95);        /* hellbeige/hellgrau als "Highlight" */
-      color: #537954;                            /* deine grüne Farbe */
-      padding: 8px 14px;                         /* Abstand um den Text */
-      border-radius: 6px;                        /* optional abgerundet */
-      margin: 0;                                 /* entferne zusätzliche margins */
-      line-height: 1;                            /* kompakter */
-    }
-    
-    /* Falls du möchtest, dass das Highlight auf Desktop größer wirkt: */
-    @media (min-width: 769px) {
-      .home-photo .grey-bg h1 {
-        padding: 12px 20px;
-        font-size: 1.6rem;
-      }
-    }
+/* Mobile nav */
+.nav-mobile{
+  display:none;
+  flex-direction:column;
+  gap:16px;
+  background:var(--headline-color);
+  padding:18px;
+}
+.nav-mobile a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+}
 
-    /* Cards: start hidden, reveal on scroll; slower animation */
-    .card{
-      background:#fff;
-      padding: clamp(1rem,2.5vw,2rem);
-      box-shadow: 0 20px 50px rgba(16,24,40,0.06);
-      transform: translateY(56px);
-      opacity: 0;
-      visibility: hidden;
-      transition: transform 1200ms cubic-bezier(.16,.84,.25,1), opacity 1200ms ease, visibility 0ms linear 1200ms;
-      margin-bottom: 56px; /* larger spacing between cards */
-    }
-    .card.visible{
-      transform: translateY(0);
-      opacity: 1;
-      visibility: visible;
-      transition-delay: 0ms;
-    }
-    .card > *{ max-width:var(--max-w); margin-left:auto; margin-right:auto; }
+/* ===== HERO / HOME PHOTO ===== */
+.home-photo{
+  position:relative;
+  width:100vw;
+  height:100vh;                         /* FULL SCREEN */
+  margin-left:calc(50% - 50vw);
+  background-image:url("/assets/images/Ziegen.png");
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
-    /* Footer */
-    footer{
-      background:var(--headline-color);
-      color:var(--headline-text);
-      text-align:center;
-      padding:28px 18px;
-    }
+/* Dark overlay */
+.home-photo::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.25);
+  z-index:1;
+}
 
-    /* Responsive adjustments */
-    @media (max-width:768px){
-      nav, .nav-left { display:none !important; } /* hide desktop nav on mobile */
-      .hamburger{ display:flex; }
-      .nav-mobile{ display:none; } /* visible only with .open */
-      .home-photo{ height:56vh; min-height:260px; background-size: cover; } /* crop same on mobile */
-      h1{ font-size: clamp(1.8rem,6vw,2.8rem); text-align:center; }
-      .home-photo .grey-bg h1 {padding: 12px 20px; font-size: 1.6rem}
+/* Grey welcome box */
+.welcome-box{
+  position:relative;
+  z-index:2;
+  background:rgba(200,200,200,0.65);
+  padding:2rem 3rem;
+  border-radius:16px;
+  text-align:center;
+}
+
+/* Override h1 color ONLY inside hero */
+.welcome-box h1{
+  color:#000;
+}
+
+/* ===== MAIN CONTENT ===== */
+main{
+  max-width:var(--max-width);
+  margin:0 auto;
+  padding:60px var(--gutter);
+}
+section{ margin-bottom:32px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:768px){
+  nav{ display:none; }
+  .hamburger{ display:flex; }
+  .nav-mobile{ display:flex; }
+
+  .header-inner{ min-height:64px; }
+
+  .welcome-box{
+    padding:1.5rem 2rem;
+  }
+  h1{ font-size:2rem; }
+}
   </style>
-  
 </head>
 
 <body>
-  <header>
-    <div class="header-inner">
-      <!-- Hamburger -->
-      <button id="hamburgerBtn" class="hamburger" aria-label="Menü" aria-expanded="false" aria-controls="mobileMenu">
-        <span class="line" aria-hidden="true"></span>
-        <span class="line" aria-hidden="true"></span>
-        <span class="line" aria-hidden="true"></span>
-      </button>
 
-      <!-- Desktop nav -->
-      <nav id="navbar" class="nav-left">
-        <a href="/" class="active">Home</a>
-        <a href="/about/">Über mich</a>
-        <a href="/tgi/">TGI</a>
-        <a href="/programme/">Angebote</a>
-        <a href="/contact/">Kontakt</a>
-      </nav>
-
-      <!-- right -->
-      <div class="nav-right" aria-hidden="false">
-        <a href="https://instagram.com/yourusername" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"/></svg>
-        </a>
-      </div>
+<header>
+  <div class="header-inner">
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
     </div>
 
-    <!-- mobile overlay -->
-    <div id="mobileOverlay" class="mobile-overlay" aria-hidden="true"></div>
-
-    <!-- mobile menu -->
-    <div id="mobileMenu" class="nav-mobile" aria-hidden="true" aria-label="Hauptmenü">
-      <a href="/">Home</a>
+    <nav>
+      <a href="/" class="active">Home</a>
       <a href="/about/">Über mich</a>
       <a href="/tgi/">TGI</a>
       <a href="/programme/">Angebote</a>
       <a href="/contact/">Kontakt</a>
+    </nav>
+
+    <div class="nav-right">
+      <a href="https://instagram.com/yourusername" aria-label="Instagram">
+        <svg viewBox="0 0 24 24">
+          <path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10z"/>
+        </svg>
+      </a>
     </div>
-  </header>
+  </div>
 
-  <main>
-    <section class="home-photo" aria-label="Hero">
-      <div class="content">
-        <div class="label">Willkommen!</div>
-      </div>
-    </section>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="/" class="active">Home</a>
+    <a href="/about/">Über mich</a>
+    <a href="/tgi/">TGI</a>
+    <a href="/programme/">Angebote</a>
+    <a href="/contact/">Kontakt</a>
+  </div>
+</header>
 
-    <section>
-      <article id="card1" class="card" aria-label="Card 1">
-        <h2>Willkommen!</h2>
-        <p>Schön, dass Sie hier sind. Für Informationen zu Angeboten bitte <a href="/programme/">hier</a> klicken.</p>
-      </article>
+<!-- HERO -->
+<section class="home-photo">
+  <div class="welcome-box">
+    <h1>Willkommen!</h1>
+  </div>
+</section>
 
-      <article id="card2" class="card" aria-label="Card 2">
-        <h2>Aktuelles</h2>
-        <p>Neues Programm: "Endlich Auszeit mit Mama!" — inklusive Mutter-Kind Angebot.</p>
-      </article>
-    </section>
-    <section>
-      <p>
-      <span class="highlight">Was genau ist TGI?</span>
-    </p>
+<!-- CONTENT -->
+<main>
+  <section>
     <p>
-      Die IAHAIO (International Animal of Human-Animal Interaction Organizations) definiert die TGI wie folgt: 
+      Schön, dass Sie hier sind. Entdecken Sie meine Angebote und erfahren Sie mehr
+      über tiergestützte Interventionen.
     </p>
-    <p>
-      <span class="indented-italic">gezielte und organisierte Maßnahmen, bei der Tiere bewusst in die Bereiche Gesundheitsfürsorge, Pädagogik und soziale Arbeit eingebunden werden, um therapeutische Fortschritte bei Menschen zu fördern. </span>
-    </p>
-    <p>
-      <span class="highlight">Wichtig:</span> Die TGI ist keine Therapie!
-    </p>
-    <p>
-      Als gelernte Sonderpädagogin arbeite ich mit verschiedenen Kindern - mit und ohne Beeinträchtigung.
-    </p>
-    <ul>
-      <li>Kinder mit Sprachentwicklungsstörungen/Sprachentwicklungsverzögerungen</li>
-      <li>Kinder mit geistigen Behinderungen</li>
-      <li>Kinder mit Entwicklungsverzögerungen</li>
-      <li>Kinder mit Autismus</li>
-      <li>Kinder mit AD(H)S</li>
-    </ul>
   </section>
-  </main>
+</main>
 
-  <footer>© 2025 Luisa Haiß</footer>
+<script>
+function toggleMenu(){
+  const menu = document.getElementById("mobileMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
 
-  <script>
-    /* ------------------------
-       Mobile menu + overlay
-       ------------------------ */
-    (function(){
-      const btn = document.getElementById('hamburgerBtn');
-      const menu = document.getElementById('mobileMenu');
-      const overlay = document.getElementById('mobileOverlay');
-      if (!btn || !menu || !overlay) return;
+const header = document.querySelector("header");
+window.addEventListener("scroll", () => {
+  header.classList.toggle("scrolled", window.scrollY > 50);
+});
+</script>
 
-      function openMenu(){
-        menu.classList.add('open'); menu.setAttribute('aria-hidden','false');
-        overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
-        btn.setAttribute('aria-expanded','true');
-        // prevent background scroll while menu open
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
-      }
-      function closeMenu(){
-        menu.classList.remove('open'); menu.setAttribute('aria-hidden','true');
-        overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
-        btn.setAttribute('aria-expanded','false');
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-      }
-      function toggleMenu(){ if (menu.classList.contains('open')) closeMenu(); else openMenu(); }
-
-      // ensure closed at load
-      document.addEventListener('DOMContentLoaded', function(){
-        closeMenu();
-        btn.addEventListener('click', function(e){ e.stopPropagation(); toggleMenu(); });
-        overlay.addEventListener('click', closeMenu);
-        // close on link click
-        menu.addEventListener('click', function(e){ if (e.target && e.target.tagName && e.target.tagName.toLowerCase()==='a') closeMenu(); });
-        // close on outside click
-        document.addEventListener('click', function(e){
-          if (!menu.classList.contains('open')) return;
-          if (e.target === btn || btn.contains(e.target)) return;
-          if (menu.contains(e.target) || overlay.contains(e.target)) return;
-          closeMenu();
-        });
-        // close on escape
-        document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
-        // close when resizing to desktop
-        window.addEventListener('resize', function(){ if (window.innerWidth > 768) closeMenu(); });
-      });
-    })();
-
-    /* ------------------------
-       Reveal cards on scroll (slower)
-       - IntersectionObserver preferred
-       - Fallback to scroll check
-       ------------------------ */
-    (function(){
-      const cards = Array.from(document.querySelectorAll('.card'));
-      if (!cards.length) return;
-
-      // reveal helper
-      function reveal(el){
-        if (!el.classList.contains('visible')){
-          el.classList.add('visible');
-        }
-      }
-
-      // use IO if supported
-      if ('IntersectionObserver' in window){
-        const io = new IntersectionObserver((entries, obs) => {
-          entries.forEach(entry => {
-            // only reveal when it intersects (comes into view)
-            if (entry.isIntersecting && entry.intersectionRatio > 0.12){
-              reveal(entry.target);
-              obs.unobserve(entry.target); // once revealed, stop observing
-            }
-          });
-        }, {
-          root: null,
-          rootMargin: '0px 0px -8% 0px', // trigger a bit earlier from bottom
-          threshold: [0, 0.12, 0.4]
-        });
-
-        cards.forEach(c => {
-          // ensure hidden initially
-          c.classList.remove('visible');
-          io.observe(c);
-        });
-
-        // initial check: if some cards already in view (rare), reveal them
-        window.addEventListener('load', () => {
-          cards.forEach(c => {
-            const r = c.getBoundingClientRect();
-            if (r.top < window.innerHeight - 40 && r.bottom > 40) reveal(c);
-          });
-        });
-      } else {
-        // fallback: reveal when card top is within viewport - 80px
-        function onScroll(){
-          cards.forEach(c => {
-            if (c.classList.contains('visible')) return;
-            const r = c.getBoundingClientRect();
-            if (r.top < window.innerHeight - 80) reveal(c);
-          });
-        }
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('load', onScroll);
-        onScroll();
-      }
-    })();
-  </script>
 </body>
 </html>
