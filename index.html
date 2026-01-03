@@ -144,10 +144,9 @@ nav a.active{
   z-index: 60;
   box-shadow: 0 8px 18px rgba(0,0,0,0.08);
 }
-.nav-mobile.open { display:flex; }
+.nav-mobile.open { display:flex; !important }
 .nav-mobile a { color:#fff; text-decoration:none; font-weight:600; padding:8px 6px; border-radius:6px; }
 .nav-mobile a:hover { text-decoration:underline; }
-
 
 /* overlay behind the mobile panel */
 .mobile-overlay{
@@ -157,7 +156,7 @@ nav a.active{
   background:rgba(0,0,0,0.35);
   z-index:110;
 }
-.mobile-overlay.open{ display:block; }
+.mobile-overlay.open{ display:block; !important }
 
 
 footer{
@@ -286,8 +285,17 @@ section{ margin-bottom:32px; }
   </div>
 </header>
 
-<!-- mobile overlay + menu (closed by default) -->
+<button id="hamburgerBtn" class="hamburger"
+        aria-label="Menü"
+        aria-expanded="false"
+        aria-controls="mobileMenu">
+  <span class="line"></span>
+  <span class="line"></span>
+  <span class="line"></span>
+</button>
+
 <div id="mobileOverlay" class="mobile-overlay" aria-hidden="true"></div>
+
 <nav id="mobileMenu" class="nav-mobile" aria-hidden="true">
   <a href="/">Home</a>
   <a href="/about/">Über mich</a>
