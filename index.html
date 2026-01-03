@@ -189,6 +189,25 @@ section{ margin-bottom:32px; }
   }
   h1{ font-size:2rem; }
 }
+  .card{
+    background:#fff;
+    padding: clamp(1rem,2.5vw,2rem);
+    box-shadow: 0 20px 50px rgba(16,24,40,0.06);
+    transform: translateY(56px);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 1200ms cubic-bezier(.16,.84,.25,1), opacity 1200ms ease, visibility 0ms linear 1200ms;
+    margin-bottom: 56px; /* larger spacing between cards */
+  }
+  .card.visible{
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0ms;
+    }
+  .card > *{ max-width:var(--max-w); margin-left:auto; margin-right:auto; }
+
+
   </style>
 </head>
 
@@ -236,11 +255,41 @@ section{ margin-bottom:32px; }
 <!-- CONTENT -->
 <main>
   <section>
-    <p>
-      Schön, dass Sie hier sind. Entdecken Sie meine Angebote und erfahren Sie mehr
-      über tiergestützte Interventionen.
-    </p>
+      <article id="card1" class="card" aria-label="Card 1">
+        <h2>Willkommen!</h2>
+        <p>Schön, dass Sie hier sind. Für Informationen zu Angeboten bitte <a href="/programme/">hier</a> klicken.</p>
+      </article>
+
+      <article id="card2" class="card" aria-label="Card 2">
+        <h2>Aktuelles</h2>
+        <p>Neues Programm: "Endlich Auszeit mit Mama!" — inklusive Mutter-Kind Angebot.</p>
+      </article>
   </section>
+  <section>
+      <p>
+      <span class="highlight">Was genau ist TGI?</span>
+    </p>
+    <p>
+      Die IAHAIO (International Animal of Human-Animal Interaction Organizations) definiert die TGI wie folgt: 
+    </p>
+    <p>
+      <span class="indented-italic">gezielte und organisierte Maßnahmen, bei der Tiere bewusst in die Bereiche Gesundheitsfürsorge, Pädagogik und soziale Arbeit eingebunden werden, um therapeutische Fortschritte bei Menschen zu fördern. </span>
+    </p>
+    <p>
+      <span class="highlight">Wichtig:</span> Die TGI ist keine Therapie!
+    </p>
+    <p>
+      Als gelernte Sonderpädagogin arbeite ich mit verschiedenen Kindern - mit und ohne Beeinträchtigung.
+    </p>
+    <ul>
+      <li>Kinder mit Sprachentwicklungsstörungen/Sprachentwicklungsverzögerungen</li>
+      <li>Kinder mit geistigen Behinderungen</li>
+      <li>Kinder mit Entwicklungsverzögerungen</li>
+      <li>Kinder mit Autismus</li>
+      <li>Kinder mit AD(H)S</li>
+    </ul>
+  </section>
+  
 </main>
 
 <script>
@@ -253,6 +302,109 @@ const header = document.querySelector("header");
 window.addEventListener("scroll", () => {
   header.classList.toggle("scrolled", window.scrollY > 50);
 });
+
+(function(){
+      const btn = document.getElementById('hamburgerBtn');
+      const menu = document.getElementById('mobileMenu');
+      const overlay = document.getElementById('mobileOverlay');
+      if (!btn || !menu || !overlay) return;
+
+      function openMenu(){
+        menu.classList.add('open'); menu.setAttribute('aria-hidden','false');
+        overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
+        btn.setAttribute('aria-expanded','true');
+        // prevent background scroll while menu open
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMenu(){
+        menu.classList.remove('open'); menu.setAttribute('aria-hidden','true');
+        overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
+        btn.setAttribute('aria-expanded','false');
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+      }
+      function toggleMenu(){ if (menu.classList.contains('open')) closeMenu(); else openMenu(); }
+
+      // ensure closed at load
+      document.addEventListener('DOMContentLoaded', function(){
+        closeMenu();
+        btn.addEventListener('click', function(e){ e.stopPropagation(); toggleMenu(); });
+        overlay.addEventListener('click', closeMenu);
+        // close on link click
+        menu.addEventListener('click', function(e){ if (e.target && e.target.tagName && e.target.tagName.toLowerCase()==='a') closeMenu(); });
+        // close on outside click
+        document.addEventListener('click', function(e){
+          if (!menu.classList.contains('open')) return;
+          if (e.target === btn || btn.contains(e.target)) return;
+          if (menu.contains(e.target) || overlay.contains(e.target)) return;
+          closeMenu();
+        });
+        // close on escape
+        document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
+        // close when resizing to desktop
+        window.addEventListener('resize', function(){ if (window.innerWidth > 768) closeMenu(); });
+      });
+    })();
+
+    /* ------------------------
+       Reveal cards on scroll (slower)
+       - IntersectionObserver preferred
+       - Fallback to scroll check
+       ------------------------ */
+    (function(){
+      const cards = Array.from(document.querySelectorAll('.card'));
+      if (!cards.length) return;
+
+      // reveal helper
+      function reveal(el){
+        if (!el.classList.contains('visible')){
+          el.classList.add('visible');
+        }
+      }
+
+      // use IO if supported
+      if ('IntersectionObserver' in window){
+        const io = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            // only reveal when it intersects (comes into view)
+            if (entry.isIntersecting && entry.intersectionRatio > 0.12){
+              reveal(entry.target);
+              obs.unobserve(entry.target); // once revealed, stop observing
+            }
+          });
+        }, {
+          root: null,
+          rootMargin: '0px 0px -8% 0px', // trigger a bit earlier from bottom
+          threshold: [0, 0.12, 0.4]
+        });
+
+        cards.forEach(c => {
+          // ensure hidden initially
+          c.classList.remove('visible');
+          io.observe(c);
+        });
+
+        // initial check: if some cards already in view (rare), reveal them
+        window.addEventListener('load', () => {
+          cards.forEach(c => {
+            const r = c.getBoundingClientRect();
+            if (r.top < window.innerHeight - 40 && r.bottom > 40) reveal(c);
+          });
+        });
+      } else {
+        // fallback: reveal when card top is within viewport - 80px
+        function onScroll(){
+          cards.forEach(c => {
+            if (c.classList.contains('visible')) return;
+            const r = c.getBoundingClientRect();
+            if (r.top < window.innerHeight - 80) reveal(c);
+          });
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('load', onScroll);
+        onScroll();
+      }
 </script>
 
 </body>
