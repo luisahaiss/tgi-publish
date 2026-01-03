@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Schrift: Baloo Thambi 2 (korrekte Einbindung) -->
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <link href='https://fonts.googleapis.com/css?family=Baloo Thambi 2' rel='stylesheet'>
   <style>
+    
 :root{
   --bg-color:#ffffff;
   --headline-text:#ffffff;
@@ -17,7 +17,6 @@
   --active-color:#537954;
   --max-width:900px;
   --gutter:20px;
-  --footer-height: 50px;
 }
 
 /* Base */
@@ -156,7 +155,7 @@ nav a.active{ background:var(--active-color); }
 .nav-mobile a:hover { text-decoration: underline; }
 
 /* Main / sections */
-main{ max-width:var(--max-width); margin:60px auto; padding:0 var(--gutter); }
+main{ max-width:var(--max-width); margin:60px auto; padding:0 var(--gutter); flex: 1;}
 section{
   background:var(--bg-color);
   padding:20px;
