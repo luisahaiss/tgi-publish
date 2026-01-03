@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi+2" rel="stylesheet">
 
-  <style>
+<style>
     :root{
       --bg:#ffffff;
       --headline-text:#ffffff;
@@ -52,6 +52,7 @@
       min-height:76px;
       padding:10px 0;
     }
+  
     nav{ display:flex; gap:18px; align-items:center; }
     nav a{ color:var(--headline-text); text-decoration:none; font-weight:600; padding:8px 12px; border-radius:8px; }
     nav a.active{ background: var(--accent); }
@@ -109,55 +110,56 @@
 
     /* Main & sections */
     main{ flex:1; padding-bottom: calc(var(--footer-h) + 24px); }
+    h1,h2{ color:var(--headline-color); font-family:"Bello Script", cursive; font-size:clamp(3rem,3vw,4rem); line-height:1.15; margin:20px 0 10px 0; margin-left:25px; padding:0; }
     section{ background:var(--bg); padding:20px; margin-bottom:20px; border-radius:12px; }
 
     /* HERO: full-viewport on desktop, cover image + beige fallback */
     /* ----------------------------
    Hero: full-screen image
    ---------------------------- */
-.home-photo {
-  height: 100vh !important;               /* ganze Höhe des Viewports */
-  min-height: 360px;
-  background-image: url("assets/images/Ziegen.png");
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-color: transparent !important; /* kein Farbhintergrund */
-  border-radius: 0 !important;
-  overflow: hidden;
-}
-
-/* container, der vorher die beige Box war: make transparent + no padding */
-.home-photo .grey-bg {
-  background: transparent !important;  /* entfernt das große beige Panel */
-  box-shadow: none !important;
-  padding: 0 !important;
-  max-width: none !important;
-  display: block;                      /* bleibt Block, wir stylen nur das h1 */
-}
-
-/* ----------------------------
-   Nur Text "Willkommen!" hervorheben
-   ---------------------------- */
-/* Variante: kleiner grauer Hintergrund direkt hinter dem h1,
-   zentriert und nur so groß wie der Text */
-.home-photo .grey-bg h1 {
-  display: inline-block;                     /* nur so breit wie der Text */
-  background: rgba(244,224,193,0.95);        /* hellbeige/hellgrau als "Highlight" */
-  color: #537954;                            /* deine grüne Farbe */
-  padding: 8px 14px;                         /* Abstand um den Text */
-  border-radius: 6px;                        /* optional abgerundet */
-  margin: 0;                                 /* entferne zusätzliche margins */
-  line-height: 1;                            /* kompakter */
-}
-
-/* Falls du möchtest, dass das Highlight auf Desktop größer wirkt: */
-@media (min-width: 769px) {
-  .home-photo .grey-bg h1 {
-    padding: 12px 20px;
-    font-size: 1.6rem;
-  }
-}
+    .home-photo {
+      height: 100vh !important;               /* ganze Höhe des Viewports */
+      min-height: 360px;
+      background-image: url("assets/images/Ziegen.png");
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-color: transparent !important; /* kein Farbhintergrund */
+      border-radius: 0 !important;
+      overflow: hidden;
+    }
+    
+    /* container, der vorher die beige Box war: make transparent + no padding */
+    .home-photo .grey-bg {
+      background: transparent !important;  /* entfernt das große beige Panel */
+      box-shadow: none !important;
+      padding: 0 !important;
+      max-width: none !important;
+      display: block;                      /* bleibt Block, wir stylen nur das h1 */
+    }
+    
+    /* ----------------------------
+       Nur Text "Willkommen!" hervorheben
+       ---------------------------- */
+    /* Variante: kleiner grauer Hintergrund direkt hinter dem h1,
+       zentriert und nur so groß wie der Text */
+    .home-photo .grey-bg h1 {
+      display: inline-block;                     /* nur so breit wie der Text */
+      background: rgba(244,224,193,0.95);        /* hellbeige/hellgrau als "Highlight" */
+      color: #537954;                            /* deine grüne Farbe */
+      padding: 8px 14px;                         /* Abstand um den Text */
+      border-radius: 6px;                        /* optional abgerundet */
+      margin: 0;                                 /* entferne zusätzliche margins */
+      line-height: 1;                            /* kompakter */
+    }
+    
+    /* Falls du möchtest, dass das Highlight auf Desktop größer wirkt: */
+    @media (min-width: 769px) {
+      .home-photo .grey-bg h1 {
+        padding: 12px 20px;
+        font-size: 1.6rem;
+      }
+    }
 
     /* Cards: start hidden, reveal on scroll; slower animation */
     .card{
@@ -193,8 +195,9 @@
       .nav-mobile{ display:none; } /* visible only with .open */
       .home-photo{ height:56vh; min-height:260px; background-size: cover; } /* crop same on mobile */
       h1{ font-size: clamp(1.8rem,6vw,2.8rem); text-align:center; }
-    }
+      .home-photo .grey-bg h1 {padding: 12px 20px; font-size: 1.6rem}
   </style>
+  
 </head>
 
 <body>
