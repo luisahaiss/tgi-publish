@@ -112,78 +112,52 @@
     section{ background:var(--bg); padding:20px; margin-bottom:20px; border-radius:12px; }
 
     /* HERO: full-viewport on desktop, cover image + beige fallback */
-    .home-photo{
-      position:relative;
-      width:100vw;
-      margin-left: calc(50% - 50vw);
-      margin-bottom:0;
-      /* --- height constraints: anpassbar --- */
-      height: 90vh;             /* Haupthöhe des Hero-Bereichs */
-      min-height: 420px;       /* Mindesthöhe auf kleinen Bildschirmen */
-      max-height: 800px;       /* Begrenzung auf sehr großen Bildschirmen */
-    
-      /* Hintergrundbild (statt fixed <img>) */
-      background-image: url("assets/images/Ziegen.png");
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-    
-      overflow:hidden;
-      padding:0;
-      border-radius:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:var(--headline-text);
-    }
-    
-    /* optionaler dunkler Overlay-Effekt, als Pseudoelement */
-    .home-photo::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:var(--overlay-color);
-      pointer-events:none;
-      z-index:1;
-    }
-    
-    .home-photo .content{ position:relative; z-index:2; display:flex; align-items:center; justify-content:center; height:100%; text-align:center; padding:clamp(1rem,3vw,3rem); }
-    
-    /* Ensure the grey box background is translucent but text is 100% opaque and crisp */
-    .home-photo .grey-bg {
-      color: var(--headline-color);
-      position: relative;
-      z-index: 3;                     /* place above the overlay */
-      background-color: rgba(169,169,169,0.55); /* translucent background only */
-      color: #000;                    /* solid text color */
-      padding: 1rem 2rem;
-      border-radius: 6px;
-      max-width: 600px;
-      text-align: center;
-    
-      /* Defensive - prevent any inherited blur/opacity/backdrop effects */
-      opacity: 1 !important;
-      filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      backdrop-filter: none !important;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      mix-blend-mode: normal;
-    }
-    
-    /* Ensure children are fully opaque too */
-    .home-photo .grey-bg * {
-      opacity: 1 !important;
-      filter: none !important;
-    }
-    
-    /* Make the heading bold and crisp */
-    .home-photo .grey-bg h1 {
-      margin: 0;
-      color: #000;         /* choose #fff if you prefer white text */
-      font-weight: 700;    /* stronger weight for visual contrast */
-      text-shadow: none;
-    }
+    /* ----------------------------
+   Hero: full-screen image
+   ---------------------------- */
+.home-photo {
+  height: 100vh !important;               /* ganze Höhe des Viewports */
+  min-height: 360px;
+  background-image: url("assets/images/Ziegen.png");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-color: transparent !important; /* kein Farbhintergrund */
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+
+/* container, der vorher die beige Box war: make transparent + no padding */
+.home-photo .grey-bg {
+  background: transparent !important;  /* entfernt das große beige Panel */
+  box-shadow: none !important;
+  padding: 0 !important;
+  max-width: none !important;
+  display: block;                      /* bleibt Block, wir stylen nur das h1 */
+}
+
+/* ----------------------------
+   Nur Text "Willkommen!" hervorheben
+   ---------------------------- */
+/* Variante: kleiner grauer Hintergrund direkt hinter dem h1,
+   zentriert und nur so groß wie der Text */
+.home-photo .grey-bg h1 {
+  display: inline-block;                     /* nur so breit wie der Text */
+  background: rgba(244,224,193,0.95);        /* hellbeige/hellgrau als "Highlight" */
+  color: #537954;                            /* deine grüne Farbe */
+  padding: 8px 14px;                         /* Abstand um den Text */
+  border-radius: 6px;                        /* optional abgerundet */
+  margin: 0;                                 /* entferne zusätzliche margins */
+  line-height: 1;                            /* kompakter */
+}
+
+/* Falls du möchtest, dass das Highlight auf Desktop größer wirkt: */
+@media (min-width: 769px) {
+  .home-photo .grey-bg h1 {
+    padding: 12px 20px;
+    font-size: 1.6rem;
+  }
+}
 
     /* Cards: start hidden, reveal on scroll; slower animation */
     .card{
