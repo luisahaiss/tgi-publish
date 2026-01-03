@@ -43,6 +43,11 @@ h2{
   margin-top:0;
 }
 
+.highlight {
+  font-weight: 700;   /* bold */
+  font-size: 1.2em;   /* bigger than surrounding text */
+}
+
 /* ===== HEADER / NAVBAR ===== */
 header{
   width:100%;
@@ -86,6 +91,7 @@ nav a.active{
 .nav-right{
   display:flex;
   gap:12px;
+  align-items:center;
 }
 .nav-right a{
   width:38px;
@@ -102,33 +108,57 @@ nav a.active{
   fill:#fff;
 }
 
-/* Hamburger */
+/* Hamburger (button) */
 .hamburger{
   display:none;
-  flex-direction:column;
-  gap:5px;
+  background:transparent;
+  border:0;
+  padding:8px;
+  margin:0;
   cursor:pointer;
+  align-items:center;
+  justify-content:center;
 }
-.hamburger div{
-  width:30px;
-  height:4px;
+.hamburger .bar{
+  display:block;
+  width:26px;
+  height:3px;
   background:#fff;
+  margin:4px 0;
   border-radius:2px;
 }
 
-/* Mobile nav */
+/* Mobile nav (panel) - hidden by default */
 .nav-mobile{
   display:none;
-  flex-direction:column;
-  gap:16px;
+  position:fixed;
+  inset:0;
+  top:64px; /* below header */
   background:var(--headline-color);
   padding:18px;
+  flex-direction:column;
+  gap:16px;
+  z-index:120;
+  overflow:auto;
 }
 .nav-mobile a{
   color:#fff;
   text-decoration:none;
   font-weight:600;
 }
+
+/* overlay behind the mobile panel */
+.mobile-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  z-index:110;
+}
+
+/* classes used to show mobile menu */
+.nav-mobile.open{ display:flex; }
+.mobile-overlay.open{ display:block; }
 
 /* ===== HERO / HOME PHOTO ===== */
 .home-photo{
@@ -168,6 +198,25 @@ nav a.active{
   color:#000;
 }
 
+/* ===== CARDS ===== */
+.card{
+  background:#fff;
+  padding: clamp(1rem,2.5vw,2rem);
+  box-shadow: 0 20px 50px rgba(16,24,40,0.06);
+  transform: translateY(56px);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 700ms cubic-bezier(.16,.84,.25,1), opacity 700ms ease;
+  margin-bottom: 56px;
+  border-radius:12px;
+}
+.card.visible{
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+.card > *{ max-width:var(--max-width); margin-left:auto; margin-right:auto; }
+
 /* ===== MAIN CONTENT ===== */
 main{
   max-width:var(--max-width);
@@ -180,34 +229,19 @@ section{ margin-bottom:32px; }
 @media (max-width:768px){
   nav{ display:none; }
   .hamburger{ display:flex; }
-  .nav-mobile{ display:flex; }
-
   .header-inner{ min-height:64px; }
 
   .welcome-box{
     padding:1.5rem 2rem;
   }
   h1{ font-size:2rem; }
+
+  /* mobile: make hero height slightly smaller so header isn't overlapping */
+  .home-photo{ height:84vh; }
+
+  /* mobile panel spacing adjustments */
+  .nav-mobile{ top:56px; padding:18px 16px; }
 }
-  .card{
-    background:#fff;
-    padding: clamp(1rem,2.5vw,2rem);
-    box-shadow: 0 20px 50px rgba(16,24,40,0.06);
-    transform: translateY(56px);
-    opacity: 0;
-    visibility: hidden;
-    transition: transform 1200ms cubic-bezier(.16,.84,.25,1), opacity 1200ms ease, visibility 0ms linear 1200ms;
-    margin-bottom: 56px; /* larger spacing between cards */
-  }
-  .card.visible{
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-    transition-delay: 0ms;
-    }
-  .card > *{ max-width:var(--max-w); margin-left:auto; margin-right:auto; }
-
-
   </style>
 </head>
 
@@ -215,9 +249,12 @@ section{ margin-bottom:32px; }
 
 <header>
   <div class="header-inner">
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div><div></div><div></div>
-    </div>
+    <!-- hamburger button for mobile -->
+    <button id="hamburgerBtn" class="hamburger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileMenu">
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
+    </button>
 
     <nav>
       <a href="/" class="active">Home</a>
@@ -229,24 +266,26 @@ section{ margin-bottom:32px; }
 
     <div class="nav-right">
       <a href="https://instagram.com/yourusername" aria-label="Instagram">
-        <svg viewBox="0 0 24 24">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10z"/>
         </svg>
       </a>
     </div>
   </div>
-
-  <div class="nav-mobile" id="mobileMenu">
-    <a href="/" class="active">Home</a>
-    <a href="/about/">Über mich</a>
-    <a href="/tgi/">TGI</a>
-    <a href="/programme/">Angebote</a>
-    <a href="/contact/">Kontakt</a>
-  </div>
 </header>
 
+<!-- mobile overlay + menu (closed by default) -->
+<div id="mobileOverlay" class="mobile-overlay" aria-hidden="true"></div>
+<nav id="mobileMenu" class="nav-mobile" aria-hidden="true">
+  <a href="/">Home</a>
+  <a href="/about/">Über mich</a>
+  <a href="/tgi/">TGI</a>
+  <a href="/programme/">Angebote</a>
+  <a href="/contact/">Kontakt</a>
+</nav>
+
 <!-- HERO -->
-<section class="home-photo">
+<section class="home-photo" aria-label="Startseite - Willkommen">
   <div class="welcome-box">
     <h1>Willkommen!</h1>
   </div>
@@ -265,147 +304,157 @@ section{ margin-bottom:32px; }
         <p>Neues Programm: "Endlich Auszeit mit Mama!" — inklusive Mutter-Kind Angebot.</p>
       </article>
   </section>
+
   <section>
-      <p>
-      <span class="highlight">Was genau ist TGI?</span>
+    <p>
+      <span style="font-weight:700; font-size:1.05em;">Was genau ist TGI?</span>
+    </p>
+    <p>Die IAHAIO (International Animal of Human-Animal Interaction Organizations) definiert die TGI wie folgt:</p>
+    <p style="margin-left:45px; font-style:italic; line-height:1.5;">
+      gezielte und organisierte Maßnahmen, bei der Tiere bewusst in die Bereiche Gesundheitsfürsorge, Pädagogik und soziale Arbeit eingebunden werden, um therapeutische Fortschritte bei Menschen zu fördern.
     </p>
     <p>
-      Die IAHAIO (International Animal of Human-Animal Interaction Organizations) definiert die TGI wie folgt: 
+      <strong>Wichtig:</strong> Die TGI ist keine Therapie!
     </p>
-    <p>
-      <span class="indented-italic">gezielte und organisierte Maßnahmen, bei der Tiere bewusst in die Bereiche Gesundheitsfürsorge, Pädagogik und soziale Arbeit eingebunden werden, um therapeutische Fortschritte bei Menschen zu fördern. </span>
-    </p>
-    <p>
-      <span class="highlight">Wichtig:</span> Die TGI ist keine Therapie!
-    </p>
-    <p>
-      Als gelernte Sonderpädagogin arbeite ich mit verschiedenen Kindern - mit und ohne Beeinträchtigung.
-    </p>
-    <ul>
-      <li>Kinder mit Sprachentwicklungsstörungen/Sprachentwicklungsverzögerungen</li>
-      <li>Kinder mit geistigen Behinderungen</li>
-      <li>Kinder mit Entwicklungsverzögerungen</li>
-      <li>Kinder mit Autismus</li>
-      <li>Kinder mit AD(H)S</li>
-    </ul>
   </section>
-  
 </main>
 
 <script>
-function toggleMenu(){
-  const menu = document.getElementById("mobileMenu");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-}
-
-const header = document.querySelector("header");
-window.addEventListener("scroll", () => {
-  header.classList.toggle("scrolled", window.scrollY > 50);
-});
-
+/* ========== Mobile menu behavior ========== */
 (function(){
-      const btn = document.getElementById('hamburgerBtn');
-      const menu = document.getElementById('mobileMenu');
-      const overlay = document.getElementById('mobileOverlay');
-      if (!btn || !menu || !overlay) return;
+  const btn = document.getElementById('hamburgerBtn');
+  const menu = document.getElementById('mobileMenu');
+  const overlay = document.getElementById('mobileOverlay');
 
-      function openMenu(){
-        menu.classList.add('open'); menu.setAttribute('aria-hidden','false');
-        overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
-        btn.setAttribute('aria-expanded','true');
-        // prevent background scroll while menu open
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
-      }
-      function closeMenu(){
-        menu.classList.remove('open'); menu.setAttribute('aria-hidden','true');
-        overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
-        btn.setAttribute('aria-expanded','false');
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-      }
-      function toggleMenu(){ if (menu.classList.contains('open')) closeMenu(); else openMenu(); }
+  if (!btn || !menu || !overlay) return;
 
-      // ensure closed at load
-      document.addEventListener('DOMContentLoaded', function(){
+  function openMenu(){
+    menu.classList.add('open');
+    overlay.classList.add('open');
+    menu.setAttribute('aria-hidden','false');
+    overlay.setAttribute('aria-hidden','false');
+    btn.setAttribute('aria-expanded','true');
+    // prevent background scroll on mobile when menu open
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu(){
+    menu.classList.remove('open');
+    overlay.classList.remove('open');
+    menu.setAttribute('aria-hidden','true');
+    overlay.setAttribute('aria-hidden','true');
+    btn.setAttribute('aria-expanded','false');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
+  function toggleMenu(){
+    if (menu.classList.contains('open')) closeMenu(); else openMenu();
+  }
+
+  // Ensure menu is closed on load
+  document.addEventListener('DOMContentLoaded', () => {
+    closeMenu();
+
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    // close on overlay click
+    overlay.addEventListener('click', closeMenu);
+
+    // close on nav link click (inside mobile menu)
+    menu.addEventListener('click', function(e){
+      const t = e.target;
+      if (t && t.tagName && t.tagName.toLowerCase() === 'a'){
         closeMenu();
-        btn.addEventListener('click', function(e){ e.stopPropagation(); toggleMenu(); });
-        overlay.addEventListener('click', closeMenu);
-        // close on link click
-        menu.addEventListener('click', function(e){ if (e.target && e.target.tagName && e.target.tagName.toLowerCase()==='a') closeMenu(); });
-        // close on outside click
-        document.addEventListener('click', function(e){
-          if (!menu.classList.contains('open')) return;
-          if (e.target === btn || btn.contains(e.target)) return;
-          if (menu.contains(e.target) || overlay.contains(e.target)) return;
-          closeMenu();
-        });
-        // close on escape
-        document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
-        // close when resizing to desktop
-        window.addEventListener('resize', function(){ if (window.innerWidth > 768) closeMenu(); });
+      }
+    });
+
+    // close on escape
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // close when resizing to desktop
+    window.addEventListener('resize', function(){
+      if (window.innerWidth > 768) closeMenu();
+    });
+
+    // close on outside click when open
+    document.addEventListener('click', function(e){
+      if (!menu.classList.contains('open')) return;
+      if (btn.contains(e.target)) return;
+      if (menu.contains(e.target)) return;
+      if (overlay.contains(e.target)) return;
+      closeMenu();
+    });
+  });
+})();
+
+/* ========== Cards reveal on scroll (IntersectionObserver with fallback) ========== */
+(function(){
+  const cards = Array.from(document.querySelectorAll('.card'));
+  if (!cards.length) return;
+
+  // reveal helper
+  function reveal(el){
+    if (!el.classList.contains('visible')){
+      el.classList.add('visible');
+    }
+  }
+
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.12){
+          reveal(entry.target);
+          obs.unobserve(entry.target); // reveal once
+        }
       });
-    })();
+    }, {
+      root: null,
+      rootMargin: '0px 0px -8% 0px',
+      threshold: [0, 0.12, 0.4]
+    });
 
-    /* ------------------------
-       Reveal cards on scroll (slower)
-       - IntersectionObserver preferred
-       - Fallback to scroll check
-       ------------------------ */
-    (function(){
-      const cards = Array.from(document.querySelectorAll('.card'));
-      if (!cards.length) return;
+    cards.forEach(c => {
+      c.classList.remove('visible'); // ensure hidden initially
+      io.observe(c);
+    });
 
-      // reveal helper
-      function reveal(el){
-        if (!el.classList.contains('visible')){
-          el.classList.add('visible');
-        }
-      }
+    // also reveal on load if already visible
+    window.addEventListener('load', () => {
+      cards.forEach(c => {
+        const r = c.getBoundingClientRect();
+        if (r.top < window.innerHeight - 40 && r.bottom > 40) reveal(c);
+      });
+    });
+  } else {
+    // fallback
+    function onScroll(){
+      cards.forEach(c => {
+        if (c.classList.contains('visible')) return;
+        const r = c.getBoundingClientRect();
+        if (r.top < window.innerHeight - 80) reveal(c);
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('load', onScroll);
+    onScroll();
+  }
+})();
 
-      // use IO if supported
-      if ('IntersectionObserver' in window){
-        const io = new IntersectionObserver((entries, obs) => {
-          entries.forEach(entry => {
-            // only reveal when it intersects (comes into view)
-            if (entry.isIntersecting && entry.intersectionRatio > 0.12){
-              reveal(entry.target);
-              obs.unobserve(entry.target); // once revealed, stop observing
-            }
-          });
-        }, {
-          root: null,
-          rootMargin: '0px 0px -8% 0px', // trigger a bit earlier from bottom
-          threshold: [0, 0.12, 0.4]
-        });
-
-        cards.forEach(c => {
-          // ensure hidden initially
-          c.classList.remove('visible');
-          io.observe(c);
-        });
-
-        // initial check: if some cards already in view (rare), reveal them
-        window.addEventListener('load', () => {
-          cards.forEach(c => {
-            const r = c.getBoundingClientRect();
-            if (r.top < window.innerHeight - 40 && r.bottom > 40) reveal(c);
-          });
-        });
-      } else {
-        // fallback: reveal when card top is within viewport - 80px
-        function onScroll(){
-          cards.forEach(c => {
-            if (c.classList.contains('visible')) return;
-            const r = c.getBoundingClientRect();
-            if (r.top < window.innerHeight - 80) reveal(c);
-          });
-        }
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('load', onScroll);
-        onScroll();
-      }
+/* ===== header scrolled class toggle ===== */
+(function(){
+  const header = document.querySelector('header');
+  if (!header) return;
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  });
+})();
 </script>
-
 </body>
 </html>
