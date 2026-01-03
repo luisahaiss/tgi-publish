@@ -111,36 +111,43 @@ nav a.active{
 }
 
 /* Hamburger (button) */
-.hamburger { 
-  display:none; 
-  flex-direction:column; 
-  gap:5px; 
-  cursor:pointer; }
-    
-.hamburger div{ 
-  width:30px; 
-  height:4px; 
-  background:var(--headline-text); 
-  border-radius:2px; }
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+}
+.hamburger .line{
+  width: 28px;
+  height: 3px;
+  background: var(--headline-text);
+  border-radius: 2px;
+}
 
 /* Mobile nav (panel) - hidden by default */
 .nav-mobile{
-  display:none;
-  position:fixed;
-  inset:0;
-  top:64px; /* below header */
-  background:var(--headline-color);
-  padding:18px;
-  flex-direction:column;
-  gap:16px;
-  z-index:120;
-  overflow:auto;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  width: calc(100% - (var(--gutter) * 2));
+  max-width: var(--max-width);
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  top: calc(100% + 8px);
+  background: var(--headline-color);
+  padding: 14px;
+  border-radius: 10px;
+  z-index: 60;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
 }
-.nav-mobile a{
-  color:#fff;
-  text-decoration:none;
-  font-weight:600;
-}
+.nav-mobile.open { display:flex; }
+.nav-mobile a { color:#fff; text-decoration:none; font-weight:600; padding:8px 6px; border-radius:6px; }
+.nav-mobile a:hover { text-decoration:underline; }
+
 
 /* overlay behind the mobile panel */
 .mobile-overlay{
@@ -150,10 +157,8 @@ nav a.active{
   background:rgba(0,0,0,0.35);
   z-index:110;
 }
-
-/* classes used to show mobile menu */
-.nav-mobile.open{ display:flex; }
 .mobile-overlay.open{ display:block; }
+
 
 footer{
   background:var(--headline-color);
@@ -234,8 +239,9 @@ section{ margin-bottom:32px; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width:768px){
-  nav{ display:none; }
+  nav, .nav-left { display:none !important; }
   .hamburger{ display:flex; }
+  .nav-mobile{ display:none; } /* only shown via .open class */
   .header-inner{ min-height:64px; }
 
   .welcome-box{
@@ -257,10 +263,10 @@ section{ margin-bottom:32px; }
 <header>
   <div class="header-inner">
     <!-- hamburger button for mobile -->
-    <button id="hamburgerBtn" class="hamburger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileMenu">
-      <span class="bar" aria-hidden="true"></span>
-      <span class="bar" aria-hidden="true"></span>
-      <span class="bar" aria-hidden="true"></span>
+    <button id="hamburgerBtn" class="hamburger" aria-label="Menü" aria-expanded="false" aria-controls="mobileMenu">
+      <span class="line" aria-hidden="true"></span>
+      <span class="line" aria-hidden="true"></span>
+      <span class="line" aria-hidden="true"></span>
     </button>
 
     <nav>
@@ -331,78 +337,79 @@ section{ margin-bottom:32px; }
   
 <script>
 /* ========== Mobile menu behavior ========== */
-(function(){
-  const btn = document.getElementById('hamburgerBtn');
-  const menu = document.getElementById('mobileMenu');
-  const overlay = document.getElementById('mobileOverlay');
+/* ================
+   Mobile menu (from code2)
+   ================ */
+(function() {
+  var menu = document.getElementById('mobileMenu');
+  var hamburger = document.getElementById('hamburgerBtn');
+  var overlay = document.getElementById('mobileOverlay');
 
-  if (!btn || !menu || !overlay) return;
-
-  function openMenu(){
+  function openMenu() {
+    if (!menu) return;
     menu.classList.add('open');
-    overlay.classList.add('open');
     menu.setAttribute('aria-hidden','false');
-    overlay.setAttribute('aria-hidden','false');
-    btn.setAttribute('aria-expanded','true');
-    // prevent background scroll on mobile when menu open
+    if (hamburger) hamburger.setAttribute('aria-expanded','true');
+    if (overlay) overlay.classList.add('open'), overlay.setAttribute('aria-hidden','false');
+    // lock background scroll
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
   }
-
-  function closeMenu(){
+  function closeMenu() {
+    if (!menu) return;
     menu.classList.remove('open');
-    overlay.classList.remove('open');
     menu.setAttribute('aria-hidden','true');
-    overlay.setAttribute('aria-hidden','true');
-    btn.setAttribute('aria-expanded','false');
+    if (hamburger) hamburger.setAttribute('aria-expanded','false');
+    if (overlay) overlay.classList.remove('open'), overlay.setAttribute('aria-hidden','true');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
   }
+  function toggleMenu() { if (!menu) return; if (menu.classList.contains('open')) closeMenu(); else openMenu(); }
 
-  function toggleMenu(){
-    if (menu.classList.contains('open')) closeMenu(); else openMenu();
-  }
+  document.addEventListener('DOMContentLoaded', function(){
+    // ensure closed on load
+    if (menu) { menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); }
+    if (overlay) { overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); }
+    if (hamburger) hamburger.setAttribute('aria-expanded','false');
 
-  // Ensure menu is closed on load
-  document.addEventListener('DOMContentLoaded', () => {
-    closeMenu();
+    if (hamburger) {
+      hamburger.addEventListener('click', function(e){ e.stopPropagation(); toggleMenu(); });
+    }
 
-    btn.addEventListener('click', function(e){
-      e.stopPropagation();
-      toggleMenu();
-    });
+    // close when clicking an internal link inside the menu
+    if (menu) {
+      menu.addEventListener('click', function(e){
+        var t = e.target;
+        if (t && t.tagName && t.tagName.toLowerCase() === 'a') {
+          closeMenu();
+        }
+      });
+    }
 
     // close on overlay click
-    overlay.addEventListener('click', closeMenu);
+    if (overlay) overlay.addEventListener('click', closeMenu);
 
-    // close on nav link click (inside mobile menu)
-    menu.addEventListener('click', function(e){
-      const t = e.target;
-      if (t && t.tagName && t.tagName.toLowerCase() === 'a'){
-        closeMenu();
-      }
-    });
-
-    // close on escape
+    // close on Escape
     document.addEventListener('keydown', function(e){
       if (e.key === 'Escape') closeMenu();
+    });
+
+    // close on outside click
+    document.addEventListener('click', function(e){
+      if (!menu || !menu.classList.contains('open')) return;
+      if (hamburger && hamburger.contains(e.target)) return;
+      if (menu.contains(e.target)) return;
+      if (overlay && overlay.contains(e.target)) return;
+      closeMenu();
     });
 
     // close when resizing to desktop
     window.addEventListener('resize', function(){
       if (window.innerWidth > 768) closeMenu();
     });
-
-    // close on outside click when open
-    document.addEventListener('click', function(e){
-      if (!menu.classList.contains('open')) return;
-      if (btn.contains(e.target)) return;
-      if (menu.contains(e.target)) return;
-      if (overlay.contains(e.target)) return;
-      closeMenu();
-    });
   });
 })();
+
 
 /* ========== Cards reveal on scroll (IntersectionObserver with fallback) ========== */
 (function(){
