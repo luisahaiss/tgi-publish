@@ -146,7 +146,11 @@ nav a.active{ background:var(--active-color); }
   background:var(--headline-color);
   padding:18px;
   border-radius:10px;
+  z-index: 60; /* über dem Header-Inhalt */
 }
+
+.nav-mobile.open {
+  display:flex;
 
 .nav-mobile a {
   color: #ffffff;              /* ✅ Menütext weiß */
@@ -190,17 +194,18 @@ p{ line-height:1.7; margin:0 0 .9rem 0; }
 
 /* Footer */
 footer {
-    background: var(--headline-color); /* or --header-color if you defined it */
-    color: var(--headline-text);
-    text-align: center;
-    padding: 30px;
-    font-size: 0.9rem;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1000
+  background: var(--headline-color);
+  color: var(--headline-text);
+  text-align: center;
+  padding: 30px;
+  font-size: 0.9rem;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
 }
+
 
 /* About-photo layout */
 .about-photo{
@@ -229,13 +234,12 @@ footer {
 @media (max-width:768px){
   nav{ display:none; }
   .hamburger{ display:flex; }
-  .nav-mobile{ display:flex; }
+  /* Entfernt: .nav-mobile{ display:flex; } */
   .header-inner{ padding:8px 12px; min-height:64px; }
   .about-photo{ flex-direction:column; gap:10px; }
   .hero-photo{ width:100%; max-width:100%; }
   h1{ font-size:1.8rem; }
 }
-
   </style>
 </head>
 
@@ -325,9 +329,77 @@ footer {
 <script>
   function toggleMenu() {
     var menu = document.getElementById('mobileMenu');
-    menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+    var hamburger = document.querySelector('.hamburger');
+    // Toggle sichtbarkeit über Klasse
+    var isOpen = menu.classList.toggle('open');
+    // Zugänglichkeit
+    menu.setAttribute('aria-hidden', (!isOpen).toString());
+    hamburger.setAttribute('aria-expanded', isOpen.toString());
   }
 
+  // Beim Laden sicherstellen: Menü ist geschlossen (für den Fall, dass CSS/Cache anders)
+  document.addEventListener('DOMContentLoaded', function() {
+    var menu = document.getElementById('mobileMenu');
+    var hamburger = document.querySelector('.hamburger');
+    if (menu) {
+      menu.classList.remove('open');
+      menu.setAttribute('aria-hidden', 'true');
+    }
+    if (hamburger) {
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+
+    // Set active link based on pathname (robuster)
+    var path = window.location.pathname;
+    // Normalize: ensure trailing slash presence matches your site links
+    if (path === '' || path === '/') path = '/';
+    var links = document.querySelectorAll('nav a, .nav-mobile a');
+    links.forEach(function(link) {
+      // Full href path part (only the path)
+      var linkHref = link.getAttribute('href');
+      try {
+        // Wenn absolute URL, erhalten wir pathname
+        var tmp = new URL(linkHref, window.location.origin);
+        linkHref = tmp.pathname;
+      } catch (e) {
+        // leave linkHref as-is (relative)
+      }
+      // Normalize both
+      var normLink = linkHref.endsWith('/') ? linkHref : linkHref + '/';
+      var normPath = path.endsWith('/') ? path : path + '/';
+      if (normLink === normPath) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  });
+
+  // Close mobile menu when clicking outside or on a link (nice UX)
+  document.addEventListener('click', function(e) {
+    var menu = document.getElementById('mobileMenu');
+    var hamburger = document.querySelector('.hamburger');
+    if (!menu || !hamburger) return;
+
+    // If click on hamburger, let toggleMenu handle it
+    if (hamburger.contains(e.target)) return;
+
+    // If click inside menu, close it when clicking a link
+    if (menu.contains(e.target) && e.target.tagName.toLowerCase() === 'a') {
+      menu.classList.remove('open');
+      menu.setAttribute('aria-hidden','true');
+      hamburger.setAttribute('aria-expanded','false');
+      return;
+    }
+
+    // Click outside menu -> close
+    if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+      menu.classList.remove('open');
+      menu.setAttribute('aria-hidden','true');
+      hamburger.setAttribute('aria-expanded','false');
+    }
+  });
+  
   // Set active link based on current page
   var currentPage = window.location.pathname.split('/').pop();
   var links = document.querySelectorAll('nav a, .nav-mobile a');
