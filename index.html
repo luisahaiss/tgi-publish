@@ -113,35 +113,51 @@
 
     /* HERO: full-viewport on desktop, cover image + beige fallback */
     .home-photo{
+      position:relative;
       width:100vw;
       margin-left: calc(50% - 50vw);
-      height:100vh;                /* fill viewport */
-      min-height:420px;
-      background-color: var(--beige); /* beige fallback visible if image missing */
-      background-image: url("assets/images/Ziegen.png"); /* adapt path if needed */
+      margin-bottom:0;
+      /* --- height constraints: anpassbar --- */
+      height: 90vh;             /* Haupthöhe des Hero-Bereichs */
+      min-height: 420px;       /* Mindesthöhe auf kleinen Bildschirmen */
+      max-height: 800px;       /* Begrenzung auf sehr großen Bildschirmen */
+    
+      /* Hintergrundbild (statt fixed <img>) */
+      background-image: url("assets/images/Ziegen.png");
+      background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
-      background-size: cover;       /* COVER so image fills and crops gracefully */
+    
+      overflow:hidden;
+      padding:0;
+      border-radius:0;
       display:flex;
       align-items:center;
       justify-content:center;
-      position:relative;
-      overflow:hidden;
-      border-radius:0;             /* remove round corners */
+      color:var(--headline-text);
     }
-    /* remove dark overlay so beige visible when image not present */
-    .home-photo::after{ content:""; position:absolute; inset:0; background: transparent; pointer-events:none; z-index:1; }
-
-    .home-photo .content{ position:relative; z-index:2; text-align:center; padding:clamp(1rem,3vw,3rem); }
-    .home-photo .label{
-      display:inline-block;
-      background: rgba(255,255,255,0.85); /* subtle box so text is readable on image */
-      color: var(--accent);
-      padding: 14px 22px;
-      border-radius:6px;
-      font-weight:700;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    
+    /* optionaler dunkler Overlay-Effekt, als Pseudoelement */
+    .home-photo::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:var(--overlay-color);
+      pointer-events:none;
+      z-index:1;
     }
+    
+    .home-photo .content{ position:relative; z-index:2; display:flex; align-items:center; justify-content:center; height:100%; text-align:center; padding:clamp(1rem,3vw,3rem); }
+    
+        .home-photo .label{
+          display:inline-block;
+          background: rgba(255,255,255,0.85); /* subtle box so text is readable on image */
+          color: var(--accent);
+          padding: 14px 22px;
+          border-radius:6px;
+          font-weight:700;
+          box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
 
     /* Cards: start hidden, reveal on scroll; slower animation */
     .card{
