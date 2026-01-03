@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Verena Rieger TGI – Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi+2" rel="stylesheet">
@@ -28,6 +28,8 @@ body{
   font-size:18px;
   background:var(--bg-color);
   color:var(--text-color);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
 /* ===== Headings ===== */
@@ -42,7 +44,7 @@ h2{
   color:var(--headline-color);
   font-family:"Bello Script", cursive;
   font-size:clamp(2rem,2vw,3rem);
-  margin-top:0;
+  margin:0 0 .6rem 0;
 }
 
 .highlight {
@@ -56,8 +58,9 @@ header{
   background:var(--headline-color);
   position:sticky;
   top:0;
-  z-index:100;
+  z-index:200;
   transition:background .22s ease;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
 }
 header.scrolled{
   background:rgba(149,177,141,0.6);
@@ -141,10 +144,10 @@ nav a.active{
   background: var(--headline-color);
   padding: 14px;
   border-radius: 10px;
-  z-index: 60;
+  z-index: 120; /* menu above overlay */
   box-shadow: 0 8px 18px rgba(0,0,0,0.08);
 }
-.nav-mobile.open { display:flex !important }
+.nav-mobile.open { display:flex !important; }
 .nav-mobile a { color:#fff; text-decoration:none; font-weight:600; padding:8px 6px; border-radius:6px; }
 .nav-mobile a:hover { text-decoration:underline; }
 
@@ -154,10 +157,9 @@ nav a.active{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,0.35);
-  z-index:110;
+  z-index:110; /* overlay under menu */
 }
-.mobile-overlay.open{ display:block !important }
-
+.mobile-overlay.open{ display:block !important; }
 
 footer{
   background:var(--headline-color);
@@ -170,12 +172,13 @@ footer{
   box-sizing:border-box;
 }
 
-
 /* ===== HERO / HOME PHOTO ===== */
+/* Ensure hero sits directly under header with no gap */
 .home-photo{
   position:relative;
   width:100vw;
   height:100vh;                         /* FULL SCREEN */
+  margin:0;                              /* no gap between header and hero */
   margin-left:calc(50% - 50vw);
   background-image:url("/assets/images/Ziegen.png");
   background-size:cover;
@@ -254,20 +257,26 @@ section{ margin-bottom:32px; }
   /* mobile panel spacing adjustments */
   .nav-mobile{ top:56px; padding:18px 16px; }
 }
+
+/* small helper to make focus outlines visible but subtle */
+button.hamburger:focus { outline: 3px solid rgba(83,121,84,0.25); outline-offset: 2px; }
+a:focus { outline: 3px solid rgba(149,177,141,0.22); outline-offset: 2px; }
   </style>
 </head>
 
 <body>
 
+<!-- HEADER (single copy) -->
 <header>
   <div class="header-inner">
-    <!-- hamburger button for mobile -->
+    <!-- hamburger button for mobile (single instance) -->
     <button id="hamburgerBtn" class="hamburger" aria-label="Menü" aria-expanded="false" aria-controls="mobileMenu">
       <span class="line" aria-hidden="true"></span>
       <span class="line" aria-hidden="true"></span>
       <span class="line" aria-hidden="true"></span>
     </button>
 
+    <!-- desktop nav -->
     <nav>
       <a href="/" class="active">Home</a>
       <a href="/about/">Über mich</a>
@@ -276,26 +285,16 @@ section{ margin-bottom:32px; }
       <a href="/contact/">Kontakt</a>
     </nav>
 
+    <!-- social icons -->
     <div class="nav-right">
-      <!-- Instagram -->
-      <a href="https://instagram.com/yourusername" target="_blank" aria-label="Instagram">
-        <svg viewBox="0 0 24 24"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"/></svg>
+      <a href="https://instagram.com/yourusername" target="_blank" aria-label="Instagram" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10z"/></svg>
       </a>
     </div>
   </div>
 </header>
 
-<button id="hamburgerBtn" class="hamburger"
-        aria-label="Menü"
-        aria-expanded="false"
-        aria-controls="mobileMenu">
-  <span class="line"></span>
-  <span class="line"></span>
-  <span class="line"></span>
-</button>
-
-<div id="mobileOverlay" class="mobile-overlay" aria-hidden="true"></div>
-
+<!-- ONE overlay & ONE mobile menu (single copies) -->
 <div id="mobileOverlay" class="mobile-overlay" aria-hidden="true"></div>
 
 <nav id="mobileMenu" class="nav-mobile" aria-hidden="true">
@@ -306,53 +305,45 @@ section{ margin-bottom:32px; }
   <a href="/contact/">Kontakt</a>
 </nav>
 
-<!-- HERO -->
+<!-- HERO (flush under header, no gap) -->
 <section class="home-photo" aria-label="Startseite - Willkommen">
   <div class="welcome-box">
     <h1>Willkommen!</h1>
   </div>
 </section>
 
-<!-- CONTENT -->
+<!-- MAIN CONTENT -->
 <main>
   <section>
-      <article id="card1" class="card" aria-label="Card 1">
-        <h2>Willkommen!</h2>
-        <p>Schön, dass Sie hier sind. Für Informationen zu Angeboten bitte <a href="/programme/">hier</a> klicken.</p>
-      </article>
+    <article id="card1" class="card" aria-label="Card 1">
+      <h2>Willkommen!</h2>
+      <p>Schön, dass Sie hier sind. Für Informationen zu Angeboten bitte <a href="/programme/">hier</a> klicken.</p>
+    </article>
 
-      <article id="card2" class="card" aria-label="Card 2">
-        <h2>Aktuelles</h2>
-        <p>Neues Programm: "Endlich Auszeit mit Mama!" — inklusive Mutter-Kind Angebot.</p>
-      </article>
+    <article id="card2" class="card" aria-label="Card 2">
+      <h2>Aktuelles</h2>
+      <p>Neues Programm: "Endlich Auszeit mit Mama!" — inklusive Mutter-Kind Angebot.</p>
+    </article>
   </section>
 
   <section>
-    <p>
-      <span style="font-weight:700; font-size:1.05em;">Was genau ist TGI?</span>
-    </p>
+    <p><span class="highlight">Was genau ist TGI?</span></p>
     <p>Die IAHAIO (International Animal of Human-Animal Interaction Organizations) definiert die TGI wie folgt:</p>
     <p style="margin-left:45px; font-style:italic; line-height:1.5;">
       gezielte und organisierte Maßnahmen, bei der Tiere bewusst in die Bereiche Gesundheitsfürsorge, Pädagogik und soziale Arbeit eingebunden werden, um therapeutische Fortschritte bei Menschen zu fördern.
     </p>
-    <p>
-      <strong>Wichtig:</strong> Die TGI ist keine Therapie!
-    </p>
+    <p><strong>Wichtig:</strong> Die TGI ist keine Therapie!</p>
   </section>
 </main>
-  
+
 <footer>
   © 2025 Luisa Haiß
 </footer>
-  
+
 <script>
-/* ========== Mobile menu behavior ========== */
-/* ================
-   Mobile menu (from code2)
-   ================ */
-/* Robust mobile menu toggler: works with id or class names */
+/* ========= Mobile menu behavior (robust) ========= */
 (function(){
-  // find button: prefer id then fallback to first .hamburger
+  // prefer ids; fallback to class selectors
   const btn = document.getElementById('hamburgerBtn') || document.querySelector('.hamburger');
   const menu = document.getElementById('mobileMenu') || document.querySelector('.nav-mobile');
   const overlay = document.getElementById('mobileOverlay') || document.querySelector('.mobile-overlay');
@@ -367,7 +358,7 @@ section{ margin-bottom:32px; }
     menu.setAttribute('aria-hidden','false');
     if (overlay) overlay.classList.add('open'), overlay.setAttribute('aria-hidden','false');
     if (btn) btn.setAttribute('aria-expanded','true');
-    // prevent background scroll on mobile
+    // lock background scroll
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
   }
@@ -423,12 +414,11 @@ section{ margin-bottom:32px; }
   });
 })();
 
-/* ========== Cards reveal on scroll (IntersectionObserver with fallback) ========== */
+/* ========= Cards reveal on scroll (IntersectionObserver + fallback) ========= */
 (function(){
   const cards = Array.from(document.querySelectorAll('.card'));
   if (!cards.length) return;
 
-  // reveal helper
   function reveal(el){
     if (!el.classList.contains('visible')){
       el.classList.add('visible');
@@ -440,7 +430,7 @@ section{ margin-bottom:32px; }
       entries.forEach(entry => {
         if (entry.isIntersecting && entry.intersectionRatio > 0.12){
           reveal(entry.target);
-          obs.unobserve(entry.target); // reveal once
+          obs.unobserve(entry.target);
         }
       });
     }, {
@@ -454,7 +444,7 @@ section{ margin-bottom:32px; }
       io.observe(c);
     });
 
-    // also reveal on load if already visible
+    // reveal those already in view on load
     window.addEventListener('load', () => {
       cards.forEach(c => {
         const r = c.getBoundingClientRect();
