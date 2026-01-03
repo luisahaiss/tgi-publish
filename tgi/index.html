@@ -5,7 +5,7 @@
   <title>Verena Rieger TGI - TGI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Google Font (korrekte Einbindung) -->
+  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi+2" rel="stylesheet">
 
   <style>
@@ -82,7 +82,7 @@ main{
   min-height:88px;
 }
 
-/* Desktop nav */
+/* Desktop nav (default visible on desktop) */
 .nav-left,
 nav{ display:flex; gap:20px; align-items:center; }
 nav a,
@@ -114,7 +114,7 @@ nav a.active{ background:var(--active-color); }
 .nav-right svg,
 .nav-right svg path{ width:18px; height:18px; fill:var(--headline-text) !important; stroke:none; }
 
-/* Hamburger (desktop hidden) */
+/* Hamburger (hidden on desktop) */
 .hamburger {
   display:none;
   flex-direction:column;
@@ -193,7 +193,7 @@ footer{
   box-sizing:border-box;
 }
 
-/* Responsive */
+/* Responsive: hide desktop nav and show hamburger (mobile) */
 @media (max-width:768px){
   nav, .nav-left { display:none !important; }  /* hide desktop nav on mobile */
   .hamburger{ display:flex; }
@@ -291,70 +291,77 @@ li{ margin-bottom:0.35rem; }
   var btn = document.getElementById('hamburgerBtn');
 
   function openMenu(){
+    if (!menu || !btn) return;
     menu.classList.add('open');
     menu.setAttribute('aria-hidden','false');
     btn.setAttribute('aria-expanded','true');
-    document.body.style.overflow = 'hidden'; // optional: prevent background scroll
+    // optional: prevent background scroll while menu open
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
   }
   function closeMenu(){
+    if (!menu || !btn) return;
     menu.classList.remove('open');
     menu.setAttribute('aria-hidden','true');
     btn.setAttribute('aria-expanded','false');
+    document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
   }
   function toggleMenu(){
-    if(menu.classList.contains('open')) closeMenu(); else openMenu();
+    if (menu.classList.contains('open')) closeMenu(); else openMenu();
   }
 
   document.addEventListener('DOMContentLoaded', function(){
-    if(menu) { menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); }
-    if(btn){
-      btn.setAttribute('aria-expanded','false');
-      btn.addEventListener('click', function(e){ e.stopPropagation(); toggleMenu(); });
+    // ensure menu closed on load (call closeMenu for full cleanup)
+    closeMenu();
+
+    if (btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        toggleMenu();
+      });
     }
 
     // close when clicking a link inside menu
     document.addEventListener('click', function(e){
       if(!menu || !btn) return;
       var t = e.target;
-      if(menu.contains(t) && t.tagName.toLowerCase()==='a'){ closeMenu(); return; }
-      if(!menu.contains(t) && !btn.contains(t)) closeMenu();
+      if (menu.contains(t) && t.tagName && t.tagName.toLowerCase() === 'a') {
+        closeMenu();
+        return;
+      }
+      // click outside -> close
+      if (!menu.contains(t) && !btn.contains(t)) {
+        closeMenu();
+      }
     });
 
     // close on escape
     document.addEventListener('keydown', function(e){
-      if(e.key === 'Escape'){ closeMenu(); }
+      if (e.key === 'Escape') closeMenu();
     });
 
     // close when resizing to desktop
-    window.addEventListener('resize', function(){ if(window.innerWidth > 768) closeMenu(); });
+    window.addEventListener('resize', function(){
+      if (window.innerWidth > 768) closeMenu();
+    });
 
-    // set active links (desktop + mobile) robustly
+    // set active links (desktop + mobile)
     var path = window.location.pathname || '/';
-    if(!path.endsWith('/')) path += '/';
+    if (!path.endsWith('/')) path += '/';
     var links = document.querySelectorAll('nav a, .nav-mobile a');
     links.forEach(function(link){
       var href = link.getAttribute('href') || '';
-      try{
+      try {
         var parsed = new URL(href, window.location.origin);
         var linkPath = parsed.pathname;
-        if(!linkPath.endsWith('/')) linkPath += '/';
-        if(linkPath === path) link.classList.add('active'); else link.classList.remove('active');
-      }catch(err){
+        if (!linkPath.endsWith('/')) linkPath += '/';
+        if (linkPath === path) link.classList.add('active'); else link.classList.remove('active');
+      } catch (err) {
         var norm = href.endsWith('/') ? href : href + '/';
-        if(norm === path) link.classList.add('active'); else link.classList.remove('active');
+        if (norm === path) link.classList.add('active'); else link.classList.remove('active');
       }
     });
-  });
-})();
-
-/* =============
-   Header scroll
-   ============= */
-(function(){
-  var header = document.querySelector('header');
-  window.addEventListener('scroll', function(){
-    if(window.scrollY > 50) header.classList.add('scrolled'); else header.classList.remove('scrolled');
   });
 })();
 </script>
