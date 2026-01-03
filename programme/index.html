@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi+2" rel="stylesheet">
   <meta charset="utf-8">
-  <title>Verena Rieger TGI - Über mich</title>
+  <title>Verena Rieger TGI - Programm</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- Schrift: Baloo Thambi 2 -->
+  <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi+2" rel="stylesheet">
   <style>
 :root{
   --bg-color:#ffffff;
@@ -15,34 +16,38 @@
   --active-color:#537954;
   --max-width:900px;
   --gutter:20px;
-  --footer-height: 50px; /* anpassen an footer-Höhe */
 }
 
 /* Base */
 *{box-sizing:border-box}
+html { height: 100%; }
 body{
   margin:0;
-  font-family: 'Baloo Thambi 2', system-ui, sans-serif;
+  font-family: 'Baloo Thambi 2', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 18px;
   background:var(--bg-color);
   color:var(--text-color);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+
+  /* Body als Flex-Column damit Footer nach unten gedrückt wird */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.highlight {
-  font-weight: 700;   /* bold */
-  font-size: 1.2em;   /* bigger than surrounding text */
-}
+.highlight { font-weight:700; font-size:1.2em; }
 
-.indented-italic {
-  display: block;          /* sicherstellen, dass es ein Block ist */
-  margin-left: 45px !important;  /* verschiebt den ganzen Block */
+.indented-italic{
+  display:block;
+  margin-left: 45px !important;
   padding-left: 0;
-  text-indent: 0 !important;     /* entfernt eventuell gesetztes first-line indent */
+  text-indent: 0 !important;
   font-style: italic;
   line-height: 1.5;
 }
 
-/* Header: full-width background, centered content */
+/* Header */
 header{
   width:100%;
   background:var(--headline-color);
@@ -51,14 +56,9 @@ header{
   z-index:50;
   transition:background .22s ease,padding .22s ease;
 }
+header.scrolled { background: rgba(149, 177, 141, 0.6); }
 
-/* Header – beim Scrollen */
-header.scrolled {
-  background: rgba(149, 177, 141, 0.6); /* transparenter */
-  --active-color: rgba(255, 255, 255, 0.35);
-}
-
-/* Centered container used by header + main */
+/* Center container */
 .header-inner,
 main{
   max-width:var(--max-width);
@@ -66,7 +66,15 @@ main{
   padding:0 var(--gutter);
 }
 
-/* Header inner layout */
+/* main soll den verbleibenden Platz füllen */
+main{
+  flex: 1;
+  max-width:var(--max-width);
+  margin:60px auto;
+  padding:0 var(--gutter);
+}
+
+/* Navigation (desktop) */
 .header-inner{
   display:flex;
   align-items:center;
@@ -74,8 +82,6 @@ main{
   gap:16px;
   min-height:88px;
 }
-
-/* Navigation (left) */
 .nav-left,
 nav{ display:flex; gap:20px; align-items:center; }
 nav a,
@@ -104,35 +110,18 @@ nav a.active{ background:var(--active-color); }
   transition:background .16s ease,transform .16s ease;
 }
 .nav-right a:hover{ background:rgba(0,0,0,0.12); transform:translateY(-2px); }
-
-/* Force SVG icons white (overrides inline fills) */
 .nav-right svg,
-.nav-right svg path{
-  width:18px; height:18px;
-  fill:var(--headline-text) !important;
-  stroke:none;
-}
+.nav-right svg path{ width:18px; height:18px; fill:var(--headline-text) !important; stroke:none; }
 
-/* Hamburger (mobile) */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-}
+/* Hamburger (hidden on desktop) */
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: transparent; border: none; padding: 6px; margin: 0; }
+.hamburger div { width: 30px; height: 4px; background: var(--headline-text); border-radius: 2px; }
 
-.hamburger div {
-  width: 30px;
-  height: 4px;
-  background: var(--headline-text);
-  border-radius: 2px;
-}
-
-/* Mobile menu (absolute, centered under header-inner) */
+/* Mobile menu (hidden by default, shown with .open) */
 .nav-mobile{
   display:none;
   flex-direction:column;
-  gap:16px;
+  gap:12px;
   width:calc(100% - (var(--gutter) * 2));
   max-width:var(--max-width);
   left:50%;
@@ -140,21 +129,16 @@ nav a.active{ background:var(--active-color); }
   position:absolute;
   top:calc(100% + 8px);
   background:var(--headline-color);
-  padding:18px;
+  padding:14px;
   border-radius:10px;
+  z-index:60;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
 }
+.nav-mobile.open { display:flex; }
+.nav-mobile a { color:#fff; text-decoration:none; font-weight:600; padding:8px 6px; border-radius:6px; }
+.nav-mobile a:hover { text-decoration: underline; }
 
-.nav-mobile a {
-  color: #ffffff;              /* ✅ Menütext weiß */
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.nav-mobile a:hover {
-  text-decoration: underline;
-}
-/* Main / sections */
-main{ max-width:var(--max-width); margin:60px auto; padding:0 var(--gutter); }
+/* Sections */
 section{
   background:var(--bg-color);
   padding:20px;
@@ -162,224 +146,102 @@ section{
   border-radius:12px;
 }
 
-main::after{
-  content: "";
-  display: block;
-  height: var(--footer-height);
-  width: 1px; /* minimal, nur damit block sichtbar ist */
-  visibility: hidden;
-}
-
 /* Headlines */
 h1,h2{
   color:var(--headline-color);
-  font-family:"Bello Script", cursive;
-  font-size: clamp(3rem, 3vw, 4rem);
+  font-family: "Baloo Thambi 2", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(2.6rem, 4vw, 3.6rem);
   line-height:1.15;
-  margin: 20px 0 10px 0; /* remove left offset */
-  margin-left: 25px; 
-  padding:0
+  margin: 20px 0 10px 0;
+  padding:0;
+  margin-left: 0;
+  text-align: left;
 }
 
 /* Paragraphs */
 p{ line-height:1.7; margin:0 0 .9rem 0; }
 
-/* Footer */
+/* About-photo */
+.about-photo{ display:flex; gap:30px; align-items:flex-start; margin:0; padding:0; }
+.hero-photo{ width:220px; max-width:40%; height:auto; background:#F4E0C1; padding:8px; border-radius:14px; object-fit:cover; flex-shrink:0; display:block; margin:0; }
+
+/* Footer: KEIN fixed - bleibt im normalen Dokumentfluss */
 footer {
-    background: var(--headline-color); /* or --header-color if you defined it */
-    color: var(--headline-text);
-    text-align: center;
-    padding: 30px;
-    font-size: 0.9rem;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1000
-}
-
-/* About-photo layout */
-.about-photo{
-  display:flex;
-  gap: 30px;               /* tighter gap between photo & text */
-  align-items:flex-start;
-  margin:0;
-  padding:0;
-}
-
-.hero-photo{
-  width:220px;
-  max-width:40%;
-  height:auto;
-  background:#F4E0C1;
-  padding:8px;            /* green/colored background space */
-  border-radius:14px;
-  object-fit:cover;
-  flex-shrink:0;
-  display:block;
-  margin:0;
-}
-.about-text{ flex:1; }
-
-.centred-photo {
-  display: block;
-  width: 100%;           /* allow scaling */
-  max-width: 320px;      /* desktop size (adjust as needed) */
-  height: auto;
-  margin: 0 auto;        /* ✅ centers horizontally */
-  padding: 8px;          /* background space */
-  border-radius: 14px;
-  object-fit: cover;
-}
-
-/* Make thumbnail responsive (use width:100% within the centred-photo) */
-.thumbnail {
+  background: var(--headline-color);
+  color: var(--headline-text);
+  text-align: center;
+  padding: 30px 20px;
+  font-size: 0.95rem;
+  position: static;
   width: 100%;
-  max-width: 320px;
-  cursor: pointer;
-  transition: transform 0.2s;
-  display: block;
-  border-radius: 8px;
+  box-sizing: border-box;
 }
 
-.thumbnail:hover {
-  transform: scale(1.03);
-}
-
-/* Overlay (hidden by default) */
-.overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 20px;
-}
-
-/* when aria-hidden=false show flex */
-.overlay[aria-hidden="false"] {
-  display: flex;
-}
-
-/* Large image inside overlay */
-.overlay img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 8px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-  animation: zoom 0.18s ease;
-}
-
-/* avoid closing when clicking the image: we'll check target in JS */
-
-@keyframes zoom {
-  from { transform: scale(0.9); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
-}
-
-.beige-bg {
-  background-color: #F4E0C1;
-  padding: 2rem;        /* Innenabstand */
-  margin: 3rem auto;   /* Außenabstand + zentriert */
-  max-width: 500px;    /* Breite der Liste */
-  border-radius: 8px;  /* Optional: abgerundete Ecken */
-}
-
-/* Responsive */
+/* Responsive adjustments */
 @media (max-width:768px){
-  nav{ display:none; }
+  /* Desktop nav ausblenden, nur Hamburger zeigen */
+  nav, .nav-left { display: none !important; }
   .hamburger{ display:flex; }
-  .nav-mobile{ display:flex; }
+
+  /* mobile menu bleibt standardmäßig hidden */
+  .nav-mobile { display: none; }
+  .nav-mobile.open { display:flex; }
+
   .header-inner{ padding:8px 12px; min-height:64px; }
-  .about-photo{ flex-direction:column; gap:10px; }
+  .about-photo{ flex-direction:column; gap:10px; align-items:center; }
   .hero-photo{ width:100%; max-width:100%; }
-  h1{ font-size:1.8rem; }
+  h1{ font-size: clamp(2.6rem, 8vw, 3.2rem); text-align:center; }
+  .nav-mobile { width: calc(100% - 32px); left:50%; transform:translateX(-50%); }
 }
+
+/* small visual tweaks */
+ul { padding-left: 1.25rem; margin: 0.5rem 0; }
+li { margin-bottom: 0.35rem; }
   </style>
 </head>
 
 <body>
-
 <header>
   <div class="header-inner">
-    <!-- Hamburger Menu -->
-    <div class="hamburger" onclick="toggleMenu()" aria-label="Menü" role="button" tabindex="0">
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menü" aria-expanded="false" aria-controls="mobileMenu">
       <div></div><div></div><div></div>
-    </div>
+    </button>
 
-    <!-- Desktop Nav (left) -->
     <nav id="navbar" class="nav-left">
       <a href="/">Home</a>
       <a href="/about/">Über mich</a>
       <a href="/tgi/">TGI</a>
-      <a href="/programme/" class="active">Angebote</a>
-      <a href="/contact/">Kontakt</a>
+      <a href="/programme/">Angebote</a>
+      <a href="/contact/" class="active">Kontakt</a>
     </nav>
 
-    <!-- Social (right) -->
-    <div class="nav-right">
-      <!-- Instagram -->
-      <a href="https://instagram.com/yourusername" target="_blank" aria-label="Instagram">
-        <svg viewBox="0 0 24 24"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"/></svg>
+    <div class="nav-right" aria-hidden="false">
+      <a href="https://instagram.com/yourusername" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"/></svg>
       </a>
     </div>
   </div>
 
-  <!-- Mobile Nav (keeps being absolute / toggled by JS) -->
   <div class="nav-mobile" id="mobileMenu" aria-hidden="true">
-    <a href="/">Home</a>
-    <a href="/about/">Über mich</a>
-    <a href="/tgi/">TGI</a>
-    <a href="/programme/" class="active">Angebote</a>
-    <a href="/contact/">Kontakt</a>
+      <a href="/">Home</a>
+      <a href="/about/">Über mich</a>
+      <a href="/tgi/">TGI</a>
+      <a href="/programme/">Angebote</a>
+      <a href="/contact/" class="active">Kontakt</a>
   </div>
 </header>
 
-
 <main>
-  <section id="programme">
-    <h1>Meine Angebote</h1>
-  </section>
+  <section id="contact"></section>
+
   <section>
-    <span class="highlight">Endlich Auszeit mit Mama! Meckern mal anders - 17.01.-25.04.26</span>
-    <p>
-      Schule, Termine, Arbeit – der Alltag ist oft dicht getaktet. Momente der Ruhe und echten Verbundenheit mit dem eigenen Kind kommen dabei leicht zu kurz. Dieses inklusive Mutter-Kind-Angebot lädt Mütter dazu ein, bewusst innezuhalten und einen geschützten Raum zu erleben, in dem Beziehung wachsen darf – fernab von Leistungsdruck und Alltagsstress.
-    </p>
-    <p>
-      Im Mittelpunkt steht ein naturpädagogisches Konzept: Gemeinsam mit dem Kind die Natur erleben, spielerisch entdecken, achtsam erforschen und mit allen Sinnen wahrnehmen. Die natürliche Umgebung eröffnet dabei neue Wege des Lernens, stärkt Vertrauen und fördert eine tiefe, lebendige Verbindung zwischen Mutter und Kind.
-    </p>
-    <ul class="beige-bg">
-      <li>Wo? PINI-Ranch, Hittisweiler (Bad Waldsee)</li>
-      <li>Wann? Jeweils samstags von 10–13 Uhr, 17.01.–25.04.26</li>
-      <li>Anmeldung: info@pini.ranch.de</li>
+    <p><span class="highlight">Bei Interesse oder Fragen zu meinen Angeboten freue ich mich über Ihre Nachricht!</span></p>
+    <p>Sie erreichen mich per Email oder auf Instagram:</p>
+    <ul>
+      <li>E-mail: info@vrieger-tgi.com.de</li>
+      <li>Instagram:</li>
     </ul>
-    <p>
-      Bei Fragen freue ich mich über eine Nachricht an info@vrieger-tgi.com.de.
-    </p>
   </section>
-
-  <!-- Thumbnail section (same format as your example) -->
-  <section class="centred-photo" aria-label="Flyer">
-    <img
-      src="/assets/images/Flyer_Jan26.jpg"
-      class="thumbnail"
-      loading="lazy"
-      id="openImage"
-    >
-  </section>
-
-  <!-- Overlay — hidden by default; large image shown only when opened -->
-  <div class="overlay" id="overlay" aria-hidden="true" role="dialog" aria-modal="true">
-    <!-- Close button for accessibility -->
-    <button class="close-btn" id="closeBtn" aria-label="Schließen" style="position:absolute; top:18px; right:18px; background:transparent; border:none; color:#fff; font-size:32px; cursor:pointer;">&times;</button>
-    <img
-      src="/assets/images/Flyer_Jan26_large.jpg"
-      id="overlayImage"
-    >
-  </div>
-
 </main>
 
 <footer>
@@ -387,90 +249,75 @@ footer {
 </footer>
 
 <script>
-  // Mobile menu toggle
+  // Toggle menu by toggling the "open" class (no inline styles)
   function toggleMenu() {
     var menu = document.getElementById('mobileMenu');
-    menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
-    // update aria-hidden accordingly
-    menu.setAttribute('aria-hidden', menu.style.display === 'none' ? 'true' : 'false');
+    var hamburger = document.getElementById('hamburgerBtn');
+    if (!menu || !hamburger) return;
+    var isOpen = menu.classList.toggle('open');
+    menu.setAttribute('aria-hidden', (!isOpen).toString());
+    hamburger.setAttribute('aria-expanded', isOpen.toString());
   }
 
-  // Set active link based on current page (keeps your behaviour)
-  (function setActiveLink() {
-    var currentPage = window.location.pathname.split('/').pop();
+  // Robust initialization + behaviors
+  document.addEventListener('DOMContentLoaded', function() {
+    var menu = document.getElementById('mobileMenu');
+    var hamburger = document.getElementById('hamburgerBtn');
+
+    // ensure closed on load
+    if (menu) { menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); }
+    if (hamburger) {
+      hamburger.setAttribute('aria-expanded','false');
+      hamburger.addEventListener('click', function(e){ e.stopPropagation(); toggleMenu(); });
+    }
+
+    // close when clicking a menu link (mobile)
+    document.addEventListener('click', function(e){
+      if (!menu || !hamburger) return;
+      var target = e.target;
+      if (menu.contains(target) && target.tagName.toLowerCase()==='a') {
+        menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); hamburger.setAttribute('aria-expanded','false');
+        return;
+      }
+      // click outside -> close
+      if (!menu.contains(target) && !hamburger.contains(target)) {
+        menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); if (hamburger) hamburger.setAttribute('aria-expanded','false');
+      }
+    });
+
+    // close on resize to desktop to avoid stale state
+    window.addEventListener('resize', function(){
+      if (window.innerWidth > 768 && menu) {
+        menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); if (hamburger) hamburger.setAttribute('aria-expanded','false');
+      }
+    });
+
+    // header scroll effect
+    var header = document.querySelector("header");
+    window.addEventListener("scroll", function(){ if (window.scrollY > 50) header.classList.add("scrolled"); else header.classList.remove("scrolled"); });
+
+    // escape to close menu
+    document.addEventListener('keydown', function(e){ if (e.key==='Escape' && menu && menu.classList.contains('open')) { menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); if (hamburger) hamburger.setAttribute('aria-expanded','false'); } });
+
+    // set active links (desktop + mobile) based on pathname
+    var path = window.location.pathname || '/';
+    if (!path.endsWith('/')) path += '/';
     var links = document.querySelectorAll('nav a, .nav-mobile a');
-    links.forEach(function(link) {
-      if (link.getAttribute('href') === currentPage) {
-        link.classList.add('active');
+    links.forEach(function(link){
+      var href = link.getAttribute('href') || '';
+      try {
+        var parsed = new URL(href, window.location.origin);
+        var linkPath = parsed.pathname;
+        if (!linkPath.endsWith('/')) linkPath += '/';
+        if (linkPath === path) link.classList.add('active');
+        else link.classList.remove('active');
+      } catch (err) {
+        var normHref = href.endsWith('/') ? href : href + '/';
+        if (normHref === path) link.classList.add('active');
+        else link.classList.remove('active');
       }
     });
-  })();
-
-  // Header scroll class
-  const header = document.querySelector("header");
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 50) {
-      header.classList.add("scrolled");
-    } else {
-      header.classList.remove("scrolled");
-    }
   });
-
-  // Lightbox behavior: open overlay only when clicking the small image
-  (function lightbox() {
-    const thumbnail = document.getElementById("openImage");
-    const overlay = document.getElementById("overlay");
-    const closeBtn = document.getElementById("closeBtn");
-    const overlayImage = document.getElementById("overlayImage");
-
-    if (!thumbnail || !overlay || !overlayImage) return;
-
-    function openOverlay() {
-      overlay.setAttribute("aria-hidden", "false");
-      // prevent background scroll while overlay open
-      document.body.style.overflow = "hidden";
-      // focus the close button for keyboard users
-      closeBtn && closeBtn.focus();
-    }
-
-    function closeOverlay() {
-      overlay.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-      // return focus to thumbnail
-      thumbnail.focus();
-    }
-
-    // open when clicking the small image
-    thumbnail.addEventListener("click", function (e) {
-      openOverlay();
-    });
-
-    // close when clicking the overlay background only (not the image)
-    overlay.addEventListener("click", function (e) {
-      if (e.target === overlay) {
-        closeOverlay();
-      }
-    });
-
-    // close button
-    if (closeBtn) {
-      closeBtn.addEventListener("click", closeOverlay);
-    }
-
-    // ESC key closes overlay
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && overlay.getAttribute("aria-hidden") === "false") {
-        closeOverlay();
-      }
-    });
-
-    // OPTIONAL: ensure overlayImage doesn't close overlay when clicked (no handler needed),
-    // but keep this in case some parent handlers exist:
-    overlayImage.addEventListener("click", function (e) {
-      e.stopPropagation();
-    });
-  })();
 </script>
-
 </body>
 </html>
