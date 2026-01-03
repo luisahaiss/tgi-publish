@@ -348,76 +348,78 @@ section{ margin-bottom:32px; }
 /* ================
    Mobile menu (from code2)
    ================ */
-(function() {
-  var menu = document.getElementById('mobileMenu');
-  var hamburger = document.getElementById('hamburgerBtn');
-  var overlay = document.getElementById('mobileOverlay');
+/* Robust mobile menu toggler: works with id or class names */
+(function(){
+  // find button: prefer id then fallback to first .hamburger
+  const btn = document.getElementById('hamburgerBtn') || document.querySelector('.hamburger');
+  const menu = document.getElementById('mobileMenu') || document.querySelector('.nav-mobile');
+  const overlay = document.getElementById('mobileOverlay') || document.querySelector('.mobile-overlay');
 
-  function openMenu() {
-    if (!menu) return;
+  if (!btn || !menu) {
+    console.warn('Mobile menu: missing button or menu element', { btn, menu });
+    return;
+  }
+
+  function openMenu(){
     menu.classList.add('open');
     menu.setAttribute('aria-hidden','false');
-    if (hamburger) hamburger.setAttribute('aria-expanded','true');
     if (overlay) overlay.classList.add('open'), overlay.setAttribute('aria-hidden','false');
-    // lock background scroll
+    if (btn) btn.setAttribute('aria-expanded','true');
+    // prevent background scroll on mobile
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
   }
-  function closeMenu() {
-    if (!menu) return;
+  function closeMenu(){
     menu.classList.remove('open');
     menu.setAttribute('aria-hidden','true');
-    if (hamburger) hamburger.setAttribute('aria-expanded','false');
     if (overlay) overlay.classList.remove('open'), overlay.setAttribute('aria-hidden','true');
+    if (btn) btn.setAttribute('aria-expanded','false');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
   }
-  function toggleMenu() { if (!menu) return; if (menu.classList.contains('open')) closeMenu(); else openMenu(); }
+  function toggleMenu(e){
+    if (e) e.stopPropagation();
+    if (menu.classList.contains('open')) closeMenu(); else openMenu();
+  }
 
-  document.addEventListener('DOMContentLoaded', function(){
-    // ensure closed on load
-    if (menu) { menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); }
-    if (overlay) { overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); }
-    if (hamburger) hamburger.setAttribute('aria-expanded','false');
+  // attach click
+  btn.addEventListener('click', toggleMenu);
 
-    if (hamburger) {
-      hamburger.addEventListener('click', function(e){ e.stopPropagation(); toggleMenu(); });
-    }
+  // overlay click closes
+  if (overlay) overlay.addEventListener('click', closeMenu);
 
-    // close when clicking an internal link inside the menu
-    if (menu) {
-      menu.addEventListener('click', function(e){
-        var t = e.target;
-        if (t && t.tagName && t.tagName.toLowerCase() === 'a') {
-          closeMenu();
-        }
-      });
-    }
-
-    // close on overlay click
-    if (overlay) overlay.addEventListener('click', closeMenu);
-
-    // close on Escape
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape') closeMenu();
-    });
-
-    // close on outside click
-    document.addEventListener('click', function(e){
-      if (!menu || !menu.classList.contains('open')) return;
-      if (hamburger && hamburger.contains(e.target)) return;
-      if (menu.contains(e.target)) return;
-      if (overlay && overlay.contains(e.target)) return;
+  // close when a link inside menu is clicked
+  menu.addEventListener('click', function(e){
+    const t = e.target;
+    if (t && t.tagName && t.tagName.toLowerCase() === 'a') {
       closeMenu();
-    });
+    }
+  });
 
-    // close when resizing to desktop
-    window.addEventListener('resize', function(){
-      if (window.innerWidth > 768) closeMenu();
-    });
+  // close on Escape
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // close on outside click
+  document.addEventListener('click', function(e){
+    if (!menu.classList.contains('open')) return;
+    if (btn.contains(e.target)) return;
+    if (menu.contains(e.target)) return;
+    if (overlay && overlay.contains(e.target)) return;
+    closeMenu();
+  });
+
+  // close when resizing to desktop
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 768) closeMenu();
+  });
+
+  // Ensure menu closed on load
+  document.addEventListener('DOMContentLoaded', function(){
+    closeMenu();
   });
 })();
-
 
 /* ========== Cards reveal on scroll (IntersectionObserver with fallback) ========== */
 (function(){
