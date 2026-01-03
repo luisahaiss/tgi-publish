@@ -40,6 +40,8 @@ h1{
 }
 h2{
   color:var(--headline-color);
+  font-family:"Bello Script", cursive;
+  font-size:clamp(2rem,2vw,3rem);
   margin-top:0;
 }
 
@@ -109,24 +111,17 @@ nav a.active{
 }
 
 /* Hamburger (button) */
-.hamburger{
-  display:none;
-  background:transparent;
-  border:0;
-  padding:8px;
-  margin:0;
-  cursor:pointer;
-  align-items:center;
-  justify-content:center;
-}
-.hamburger .bar{
-  display:block;
-  width:26px;
-  height:3px;
-  background:#fff;
-  margin:4px 0;
-  border-radius:2px;
-}
+.hamburger { 
+  display:none; 
+  flex-direction:column; 
+  gap:5px; 
+  cursor:pointer; }
+    
+.hamburger div{ 
+  width:30px; 
+  height:4px; 
+  background:var(--headline-text); 
+  border-radius:2px; }
 
 /* Mobile nav (panel) - hidden by default */
 .nav-mobile{
