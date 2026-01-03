@@ -145,28 +145,39 @@ footer{
   position:relative;
   width:100vw;
   margin-left: calc(50% - 50vw);
-  height: 90vh;
-  min-height:360px;
-  max-height:780px;
+  margin-bottom:0;
+  /* --- height constraints: anpassbar --- */
+  height: 90vh;             /* Haupthöhe des Hero-Bereichs */
+  min-height: 420px;       /* Mindesthöhe auf kleinen Bildschirmen */
+  max-height: 800px;       /* Begrenzung auf sehr großen Bildschirmen */
+
+  /* Hintergrundbild (statt fixed <img>) */
   background-image: url("assets/images/Ziegen.png");
   background-size: cover;
-  background-position:center center;
-  background-repeat:no-repeat;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  overflow:hidden;
+  padding:0;
+  border-radius:0;
   display:flex;
   align-items:center;
   justify-content:center;
-  overflow:hidden;
   color:var(--headline-text);
-  border-radius:0; /* no round border */
 }
+
+/* optionaler dunkler Overlay-Effekt, als Pseudoelement */
 .home-photo::after{
   content:"";
   position:absolute;
   inset:0;
   background:var(--overlay-color);
+  pointer-events:none;
   z-index:1;
 }
-.home-photo .content{ position:relative; z-index:2; padding:clamp(1rem,3vw,3rem); text-align:center; }
+
+.home-photo .content{ position:relative; z-index:2; display:flex; align-items:center; justify-content:center; height:100%; text-align:center; padding:clamp(1rem,3vw,3rem); }
+
 .grey-bg{
   background-color: rgba(169,169,169,0.55);
   color:#000;
