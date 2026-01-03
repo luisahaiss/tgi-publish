@@ -140,33 +140,31 @@ footer{
   box-sizing:border-box;
 }
 
-/* ---------- HERO ---------- */
+/* ---------- HERO: show whole image (contain) and no zoom ---------- */
+/* Using background-size: contain so the whole image is visible.
+   Note: this can leave letterboxing (empty bars) to preserve whole image. */
 .home-photo{
   position:relative;
   width:100vw;
   margin-left: calc(50% - 50vw);
   margin-bottom:0;
-  /* --- height constraints: anpassbar --- */
-  height: 90vh;             /* Haupthöhe des Hero-Bereichs */
-  min-height: 420px;       /* Mindesthöhe auf kleinen Bildschirmen */
-  max-height: 800px;       /* Begrenzung auf sehr großen Bildschirmen */
-
-  /* Hintergrundbild (statt fixed <img>) */
+  height: 100vh;           /* fill viewport height */
+  min-height: 420px;
   background-image: url("assets/images/Ziegen.png");
-  background-size: cover;
-  background-position: center center;
+  background-size: contain;       /* show whole image (no cropping) */
+  background-position: center;    /* center the contained image */
   background-repeat: no-repeat;
-
+  background-color: #F4E0C1;      /* gentle fallback color for letterbox areas */
   overflow:hidden;
   padding:0;
-  border-radius:0;
+  border-radius:0; /* no rounding */
   display:flex;
   align-items:center;
   justify-content:center;
   color:var(--headline-text);
 }
 
-/* optionaler dunkler Overlay-Effekt, als Pseudoelement */
+/* remove any animation/zoom on hero - keep static overlay only */
 .home-photo::after{
   content:"";
   position:absolute;
@@ -175,7 +173,6 @@ footer{
   pointer-events:none;
   z-index:1;
 }
-
 .home-photo .content{ position:relative; z-index:2; display:flex; align-items:center; justify-content:center; height:100%; text-align:center; padding:clamp(1rem,3vw,3rem); }
 
 .grey-bg{
@@ -187,10 +184,9 @@ footer{
   margin:0 auto;
   box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
-/* Willkommen in #537954 */
 .home-photo .grey-bg h1{ color: #537954; margin:0; }
 
-/* ---------- CARDS ---------- */
+/* ---------- CARDS: hidden initially, reveal slower on scroll ---------- */
 .card{
   position: relative;
   width: 100%;
@@ -200,19 +196,22 @@ footer{
   box-shadow: 0 18px 50px rgba(16,24,40,0.08);
   z-index: 40;
 
-  /* initial: moved down and invisible */
-  transform: translateY(36px);
+  /* hidden by default */
+  transform: translateY(80px);
   opacity: 0;
-  transition: transform 420ms cubic-bezier(.22,.9,.34,1), opacity 300ms linear;
+  visibility: hidden;
+  transition: transform 900ms cubic-bezier(.16,.84,.25,1), opacity 900ms ease, visibility 0s linear 900ms;
 }
 
 /* spacing between stacked cards (increased) */
-.card + .card { margin-top: 48px; }
+.card + .card { margin-top: 64px; }
 
-/* visible state: reset transform & show */
+/* visible state: show and animate slower */
 .card.visible{
   transform: translateY(0);
   opacity: 1;
+  visibility: visible;
+  transition: transform 900ms cubic-bezier(.16,.84,.25,1), opacity 900ms ease, visibility 0s linear 0s;
 }
 
 /* ensure card content doesn't exceed max width */
@@ -229,7 +228,7 @@ footer{
   .nav-mobile.open{ display:flex; }
   .mobile-overlay{ display:none; } /* toggled by class */
   .header-inner{ padding:8px 12px; min-height:64px; }
-  .home-photo{ height:56vh; min-height:260px; }
+  .home-photo{ height:100vh; min-height:100vh; }
   h1{ font-size: clamp(1.8rem,6vw,2.8rem); text-align:center; }
 }
 @media (prefers-reduced-motion: reduce){
@@ -304,7 +303,6 @@ footer{
     <p><span class="highlight">Was genau ist TGI?</span></p>
     <p>Die IAHAIO (International Association of Human-Animal Interaction Organizations) definiert TGI als gezielte und organisierte Maßnahmen, bei der Tiere bewusst in die Bereiche Gesundheitsfürsorge, Pädagogik und soziale Arbeit eingebunden werden, um therapeutische Fortschritte zu fördern.</p>
     <p><span class="indented-italic">Wichtig: TGI ist keine Therapie im medizinischen Sinne.</span></p>
-    <p>Als gelernte Sonderpädagogin arbeite ich mit Kindern mit und ohne Beeinträchtigung.</p>
     <ul>
       <li>Kinder mit Sprachentwicklungsstörungen</li>
       <li>Kinder mit geistigen Behinderungen</li>
@@ -370,16 +368,15 @@ footer{
 })();
 
 /* ------------------------
-   Cards: reveal on scroll down (IntersectionObserver + scroll direction)
-   - They remain hidden on load.
-   - They reveal only when user is scrolling down into them.
-   - Once revealed they stay visible.
+   Cards: reveal on scroll down (IntersectionObserver)
+   - cards are hidden initially
+   - reveal only when user scrolls down into them
+   - reveal is slower (900ms transition)
    ------------------------ */
 (function(){
   const cards = document.querySelectorAll('.card');
   if (!cards || cards.length === 0) return;
 
-  // Keep track of scroll direction
   let lastY = window.scrollY || 0;
   let scrollDir = 'down';
   window.addEventListener('scroll', () => {
@@ -388,70 +385,36 @@ footer{
     lastY = y;
   }, { passive: true });
 
-  // If IO not supported -> fallback: reveal on first user scroll down
   if (!('IntersectionObserver' in window)) {
-    function revealOnScrollOnce() {
+    // fallback: reveal each card after a short delay when user scrolls down
+    function fallbackReveal() {
       if (scrollDir === 'down') {
-        cards.forEach(c => c.classList.add('visible'));
-        window.removeEventListener('scroll', revealOnScrollOnce);
+        cards.forEach((c, i) => setTimeout(()=> c.classList.add('visible'), i * 150));
+        window.removeEventListener('scroll', fallbackReveal);
       }
     }
-    window.addEventListener('scroll', revealOnScrollOnce, { passive: true });
+    window.addEventListener('scroll', fallbackReveal, { passive: true });
     return;
   }
 
-  // Observer: use small positive rootMargin so element is "coming from below"
   const io = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
-      // only reveal when:
-      //  - element intersects
-      //  - user is scrolling down right now (so it appears as you scroll down)
-      //  - intersection ratio is meaningful
-      if (entry.isIntersecting && entry.intersectionRatio > 0.12 && scrollDir === 'down') {
-        entry.target.classList.add('visible');
-        obs.unobserve(entry.target); // stop observing so it stays visible
+      if (entry.isIntersecting && entry.intersectionRatio > 0.08 && scrollDir === 'down') {
+        // small stagger for nicer feel
+        setTimeout(() => entry.target.classList.add('visible'), 80);
+        obs.unobserve(entry.target);
       }
     });
   }, {
     root: null,
-    rootMargin: '60px 0px -10% 0px', // trigger slightly before it's fully in view (from bottom)
-    threshold: [0, 0.12, 0.4]
+    rootMargin: '140px 0px -10% 0px',
+    threshold: [0, 0.08, 0.3]
   });
 
-  // Start observing
   cards.forEach(card => {
-    // ensure hidden at start
-    card.classList.remove('visible');
+    card.classList.remove('visible'); // ensure hidden
     io.observe(card);
   });
-
-  // Edge case: if user never scrolls but cards are already visible and user then scrolls down a bit,
-  // we need to attempt one manual check so they reveal when user starts scrolling.
-  let startedListening = false;
-  function tryRevealWhenUserScrolls() {
-    if (startedListening) return;
-    startedListening = true;
-    const tryReveal = () => {
-      cards.forEach(card => {
-        if (card.classList.contains('visible')) return;
-        const rect = card.getBoundingClientRect();
-        const vh = window.innerHeight || document.documentElement.clientHeight;
-        // element is below fold but within threshold from bottom: reveal only if scrolling down
-        if (rect.top < vh && rect.top > 0 && scrollDir === 'down') {
-          card.classList.add('visible');
-          try { io.unobserve(card); } catch(e){}
-        }
-      });
-      // if all revealed, stop listening
-      const remaining = Array.from(cards).some(c => !c.classList.contains('visible'));
-      if (!remaining) {
-        window.removeEventListener('scroll', tryReveal);
-      }
-    };
-    window.addEventListener('scroll', tryReveal, { passive: true });
-  }
-  // start listening as soon as user interacts (first scroll)
-  window.addEventListener('scroll', tryRevealWhenUserScrolls, { passive: true, once: true });
 })();
 </script>
 </body>
