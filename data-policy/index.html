@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Verena Rieger TGI - Datenschutzerklärung</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Schrift -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+:root{
+  --bg-color:#ffffff;
+  --headline-text:#ffffff;
+  --headline-color:#95b18d;
+  --text-color:#000000;
+  --active-color:#537954;
+  --max-width:900px;
+  --gutter:20px;
+}
+
+/* Base */
+*{box-sizing:border-box}
+html { height: 100%; }
+body{
+  margin:0;
+  font-family: 'Baloo Thambi 2', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 18px;
+  background:var(--bg-color);
+  color:var(--text-color);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+
+  /* <-- entscheidend: Body als Flex-Column, damit Footer nach unten gedrückt wird */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.p2 {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+}
+
+.highlight { font-weight:700; font-size:1.2em; }
+
+.indented-italic{
+  display:block;
+  margin-left: 45px !important;
+  padding-left: 0;
+  text-indent: 0 !important;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Header */
+header{
+  width:100%;
+  background:var(--headline-color);
+  position:sticky;
+  top:0;
+  z-index:50;
+  transition:background .22s ease,padding .22s ease;
+}
+header.scrolled { background: rgba(149, 177, 141, 0.6); }
+
+/* Center container */
+.header-inner,
+main{
+  max-width:var(--max-width);
+  margin:0 auto;
+  padding:0 var(--gutter);
+}
+
+/* Wichtig: main soll den verbleibenden Platz füllen */
+main{
+  flex: 1;
+  max-width:var(--max-width);
+  margin:60px auto;
+  padding:0 var(--gutter);
+}
+
+/* Navigation (desktop) */
+.header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  min-height:88px;
+}
+.nav-left,
+nav{ display:flex; gap:20px; align-items:center; }
+nav a,
+.nav-left a{
+  color:var(--headline-text);
+  text-decoration:none;
+  font-weight:600;
+  padding:8px 12px;
+  border-radius:8px;
+}
+nav a.active{ background:var(--active-color); }
+
+/* Social icons (right) */
+.nav-right{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.nav-right a{
+  width:38px; height:38px;
+  display:inline-flex;
+  align-items:center; justify-content:center;
+  border-radius:8px;
+  background:rgba(0,0,0,0.08);
+  text-decoration:none;
+  transition:background .16s ease,transform .16s ease;
+}
+.nav-right a:hover{ background:rgba(0,0,0,0.12); transform:translateY(-2px); }
+.nav-right svg,
+.nav-right svg path{ width:18px; height:18px; fill:var(--headline-text) !important; stroke:none; }
+
+/* Hamburger (hidden on desktop) */
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: transparent; border: none; padding: 6px; margin: 0; }
+.hamburger div { width: 30px; height: 4px; background: var(--headline-text); border-radius: 2px; }
+
+/* Mobile menu (hidden by default, shown with .open) */
+.nav-mobile{
+  display:none;
+  flex-direction:column;
+  gap:12px;
+  width:calc(100% - (var(--gutter) * 2));
+  max-width:var(--max-width);
+  left:50%;
+  transform:translateX(-50%);
+  position:absolute;
+  top:calc(100% + 8px);
+  background:var(--headline-color);
+  padding:14px;
+  border-radius:10px;
+  z-index:60;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+.nav-mobile.open { display:flex; }
+.nav-mobile a { color:#fff; text-decoration:none; font-weight:600; padding:8px 6px; border-radius:6px; }
+.nav-mobile a:hover { text-decoration: underline; }
+
+/* Sections */
+section{
+  background:var(--bg-color);
+  padding:20px;
+  margin-bottom:20px;
+  border-radius:12px;
+}
+
+/* Headlines */
+h1{
+  color:var(--headline-color);
+  font-family: "Baloo Thambi 2", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(1.6rem, 2vw, 2.6rem);
+  line-height:1;
+  margin: 20px 0 10px 0;
+  padding:0;
+  margin-left: 0;
+  text-align: left;
+}
+
+h2{
+  color:#000000;
+  font-family: "Baloo Thambi 2", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(1rem, 2vw, 1.8rem);
+  line-height:1;
+  margin: 20px 0 10px 0;
+  padding:0;
+  margin-left: 0;
+  text-align: left;
+}
+
+/* Paragraphs */
+p{ line-height:1.7; margin:0 0 .9rem 0; }
+
+/* Footer: KEIN fixed - bleibt im normalen Dokumentfluss */
+footer {
+  background: var(--headline-color);
+  color: var(--headline-text);
+  text-align: left;
+  padding: 30px 20px;
+  font-size: 0.95rem;
+  position: static; /* <-- wichtig */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive adjustments */
+@media (max-width:768px){
+  nav, .nav-left { display: none !important; }
+  .hamburger{ display:flex; }
+  .nav-mobile { display: none; }
+  .nav-mobile.open { display:flex; }
+  .header-inner{ padding:8px 12px; min-height:64px; }
+  h1{ font-size: clamp(2.6rem, 8vw, 3.2rem); text-align:center; }
+  .nav-mobile { width: calc(100% - 32px); left:50%; transform:translateX(-50%); }
+}
+
+/* small visual tweaks */
+ul { padding-left: 1.25rem; margin: 0.5rem 0; }
+li { margin-bottom: 0.35rem; }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="header-inner">
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menü" aria-expanded="false" aria-controls="mobileMenu">
+      <div></div><div></div><div></div>
+    </button>
+
+    <nav id="navbar" class="nav-left">
+      <a href="/">Home</a>
+      <a href="/about/">Über mich</a>
+      <a href="/tgi/">TGI</a>
+      <a href="/programme/">Angebote</a>
+      <a href="/contact/">Kontakt</a>
+    </nav>
+
+    <div class="nav-right" aria-hidden="false">
+      <a href="https://instagram.com/yourusername" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="nav-mobile" id="mobileMenu" aria-hidden="true">
+      <a href="/">Home</a>
+      <a href="/about/">Über mich</a>
+      <a href="/tgi/">TGI</a>
+      <a href="/programme/">Angebote</a>
+      <a href="/contact/" class="active">Kontakt</a>
+  </div>
+</header>
+
+<main>
+  <section id="data-policy"></section>
+
+  <h1>Datenschutzerklärung</h1>
+    <p class="small">Stand: 19.01.2025</p>
+
+    <section class="section">
+      <h2>1. Verantwortlicher</h2>
+      <address>
+        Verena Rieger<br>
+        Weingartshoferstraße 24<br>
+        88214 Ravensburg, Deutschland<br>
+        Telefon: <a href="tel:+49 1590 2020 367" style="color: #000000">+49 1590 2020 367</a><br>
+        E-Mail: <a href="mailto: info@vrieger-tgi.com.de" style="color: #000000">info@vrieger-tgi.com.de</a>
+      </address>
+      <p>Verantwortlich im Sinne der Datenschutzgesetze ist die oben genannte natürliche oder juristische Person.</p>
+    </section>
+
+    <section class="section">
+      <h2>2. Hosting über GitHub Pages</h2>
+      <p>Diese Website wird als statische Website über GitHub Pages betrieben (Dienst: GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA). Beim Zugriff auf die Website werden durch GitHub automatische Server-Logfiles erzeugt, die typischerweise folgende Informationen enthalten können:</p>
+      <ul>
+        <li>IP-Adresse des anfragenden Endgeräts</li>
+        <li>Datum und Uhrzeit des Zugriffs</li>
+        <li>aufgerufene URL / Datei</li>
+        <li>Browsertyp und Betriebssystem (User-Agent)</li>
+        <li>Referrer (sofern übermittelt)</li>
+      </ul>
+      <p>Diese Daten werden zur Bereitstellung der Website, zur Gewährleistung der Stabilität und Sicherheit und zur Fehleranalyse verarbeitet. Eine Zusammenführung dieser Logdaten mit sonstigen Datenquellen erfolgt nicht.</p>
+      <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem sicheren und stabilen Betrieb).</p>
+    </section>
+
+    <section class="section">
+      <h2>3. Datenübermittlung in Drittländer</h2>
+      <p>GitHub verarbeitet Daten teilweise in den Vereinigten Staaten. GitHub ist nach dem <em>EU-US Data Privacy Framework</em> zertifiziert bzw. stellt entsprechende Garantien zur Verfügung. Weitere Informationen zur Verarbeitung und zu den Datenschutzbestimmungen von GitHub findest du hier:</p>
+      <p><a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" style="color: #000000" target="_blank" rel="noopener">GitHub – Privacy Statement</a></p>
+    </section>
+
+    <section class="section">
+      <h2>4. Cookies und Analyse-Tools</h2>
+      <p>Diese Website verwendet keine Cookies zu Analyse- oder Werbezwecken. Es sind keine Tracking- oder Analyse-Tools (z. B. Google Analytics) integriert.</p>
+      <p>Falls künftig Dienste Dritter eingebunden werden, die Cookies oder Tracking verwenden, wirst du hierüber informiert und ggf. um Einwilligung gebeten, sofern dies rechtlich erforderlich ist.</p>
+    </section>
+
+    <section class="section">
+      <h2>5. Kontaktaufnahme (E-Mail, Telefon)</h2>
+      <p>Bei Kontaktaufnahme per E-Mail oder Telefon werden die von dir mitgeteilten personenbezogenen Daten (z. B. Name, E-Mail-Adresse, Telefonnummer, Inhalt der Anfrage) ausschließlich zur Bearbeitung deiner Anfrage verwendet.</p>
+      <p>Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (Vorvertragliches / vertragliches Handeln) oder Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an Kommunikation).</p>
+      <p>Die Daten werden gelöscht, sobald sie für die Zwecke ihrer Erhebung nicht mehr erforderlich sind, es sei denn, es bestehen gesetzliche Aufbewahrungspflichten.</p>
+    </section>
+
+    <section class="section">
+      <h2>6. Verlinkung zu Instagram</h2>
+      <p>Auf der Website befindet sich ein Link zu unserem Instagram-Profil: <a href="https://instagram.com/yourusername" style="color: #000000",target="_blank" rel="noopener">Instagram</a>. Beim Anklicken des Links verlässt du unsere Seite; Instagram/Meta ist in diesem Moment alleiniger Verantwortlicher für die dortige Datenverarbeitung.</p>
+      <p>Weitere Informationen zur Datenverarbeitung durch Instagram findest du hier:</p>
+      <p><a href="https://privacycenter.instagram.com/" style="color: #000000"; target="_blank" rel="noopener">Instagram – Datenschutzinformationen</a></p>
+    </section>
+
+    <section class="section">
+      <h2>7. Rechte der betroffenen Personen</h2>
+      <p>Du hast als betroffene Person nach der DSGVO folgende Rechte:</p>
+      <ul>
+        <li>Recht auf Auskunft (Art. 15 DSGVO)</li>
+        <li>Recht auf Berichtigung (Art. 16 DSGVO)</li>
+        <li>Recht auf Löschung (Art. 17 DSGVO)</li>
+        <li>Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+        <li>Recht auf Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
+        <li>Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</li>
+      </ul>
+      <p>Zur Ausübung deiner Rechte kannst du dich an die oben genannte Kontaktadresse wenden. Außerdem steht dir das Beschwerderecht bei einer Datenschutzaufsichtsbehörde zu.</p>
+    </section>
+
+    <section class="section">
+      <h2>8. Änderungen dieser Datenschutzerklärung</h2>
+      <p>Diese Datenschutzerklärung ist aktuell gültig und hat den Stand: 19.01.2026. Wir behalten uns vor, die Erklärung bei Änderung der rechtlichen oder technischen Rahmenbedingungen anzupassen. Die jeweils aktuelle Version wird auf dieser Seite veröffentlicht.</p>
+    </section>
+    
+  </section>
+</main>
+
+<footer>
+  © 2025 Luisa Haiß
+</footer>
+
+<script>
+  function toggleMenu() {
+    var menu = document.getElementById('mobileMenu');
+    var hamburger = document.getElementById('hamburgerBtn');
+    if (!menu || !hamburger) return;
+    var isOpen = menu.classList.toggle('open');
+    menu.setAttribute('aria-hidden', (!isOpen).toString());
+    hamburger.setAttribute('aria-expanded', isOpen.toString());
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var menu = document.getElementById('mobileMenu');
+    var hamburger = document.getElementById('hamburgerBtn');
+
+    if (menu) { menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); }
+    if (hamburger) {
+      hamburger.setAttribute('aria-expanded','false');
+      hamburger.addEventListener('click', function(e){ e.stopPropagation(); toggleMenu(); });
+    }
+
+    document.addEventListener('click', function(e){
+      if (!menu || !hamburger) return;
+      var target = e.target;
+      if (menu.contains(target) && target.tagName.toLowerCase()==='a') {
+        menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); hamburger.setAttribute('aria-expanded','false');
+        return;
+      }
+      if (!menu.contains(target) && !hamburger.contains(target)) {
+        menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); if (hamburger) hamburger.setAttribute('aria-expanded','false');
+      }
+    });
+
+    window.addEventListener('resize', function(){
+      if (window.innerWidth > 768 && menu) {
+        menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); if (hamburger) hamburger.setAttribute('aria-expanded','false');
+      }
+    });
+
+    // header scroll effect
+    var header = document.querySelector("header");
+    window.addEventListener("scroll", function(){ if (window.scrollY > 50) header.classList.add("scrolled"); else header.classList.remove("scrolled"); });
+
+    // escape to close menu
+    document.addEventListener('keydown', function(e){ if (e.key==='Escape' && menu && menu.classList.contains('open')) { menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); if (hamburger) hamburger.setAttribute('aria-expanded','false'); } });
+  });
+</script>
+</body>
+</html>
